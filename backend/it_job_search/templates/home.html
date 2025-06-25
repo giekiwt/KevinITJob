@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Job Search</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
+    <link rel="icon" href="https://img.icons8.com/color/48/000000/job.png">
+    <style>
+        :root {
+            --main-red: #007cf0;
+            --main-black: #18191a;
+            --main-gray: #f6f8fa;
+            --main-white: #fff;
+            --main-gradient: linear-gradient(90deg, #18191a 60%, #999714 100%);
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', Arial, sans-serif;
+            background: var(--main-gray);
+            color: #222;
+        }
+        .header {
+            background: var(--main-gradient);
+            color: var(--main-white);
+            padding: 0 0 32px 0;
+        }
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 18px 24px 0 24px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .logo-img {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .logo-img span {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.7rem;
+            color: var(--main-red);
+        }
+        .logo-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: #fff;
+        }
+        .menu {
+            display: flex;
+            gap: 28px;
+        }
+        .menu a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: color 0.2s;
+        }
+        .menu a:hover {
+            color: #ffb3b3;
+        }
+        .search-section {
+            max-width: 700px;
+            margin: 36px auto 0 auto;
+            padding: 0 24px;
+        }
+        .search-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 18px;
+            color: #fff;
+            text-align: center;
+        }
+        .search-bar {
+            display: flex;
+            gap: 12px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            padding: 12px 16px;
+            align-items: center;
+        }
+        .search-bar select, .search-bar input {
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            padding: 8px 10px;
+            border-radius: 6px;
+            background: #f6f8fa;
+            font-family: 'Roboto', sans-serif;
+        }
+        .search-bar select {
+            min-width: 120px;
+        }
+        .search-bar input {
+            flex: 1;
+        }
+        .search-btn {
+            background: var(--main-red);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 22px;
+            font-size: 1rem;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(230,0,35,0.08);
+        }
+        .search-btn:hover {
+            background: #b8001a;
+        }
+        .trending {
+            margin: 18px auto 0 auto;
+            max-width: 700px;
+            padding: 0 24px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .trend-tag {
+            background: #23272b;
+            color: #fff;
+            border-radius: 16px;
+            padding: 6px 18px;
+            font-size: 0.98rem;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            letter-spacing: 0.01em;
+            transition: background 0.2s, color 0.2s;
+            cursor: pointer;
+        }
+        .trend-tag:hover {
+            background: var(--main-red);
+            color: #fff;
+        }
+        .services {
+            max-width: 1100px;
+            margin: 36px auto 0 auto;
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .service-card {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            padding: 28px 32px 22px 32px;
+            min-width: 260px;
+            max-width: 320px;
+            flex: 1 1 260px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            position: relative;
+        }
+        .service-card .badge {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            background: var(--main-red);
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border-radius: 6px;
+            padding: 2px 10px;
+        }
+        .service-card .badge.new {
+            background: #1bc47d;
+        }
+        .service-card .icon {
+            font-size: 2.2rem;
+            margin-bottom: 12px;
+        }
+        .service-card-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .service-card-desc {
+            font-size: 1rem;
+            color: #444;
+            margin-bottom: 18px;
+        }
+        .service-card-btn {
+            background: #fff;
+            color: var(--main-red);
+            border: 2px solid var(--main-red);
+            border-radius: 6px;
+            padding: 7px 18px;
+            font-size: 1rem;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .service-card-btn:hover {
+            background: var(--main-red);
+            color: #fff;
+        }
+        @media (max-width: 900px) {
+            .services {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        @media (max-width: 700px) {
+            .nav, .search-section, .trending, .services {
+                padding-left: 8px;
+                padding-right: 8px;
+            }
+            .search-title {
+                font-size: 1.2rem;
+            }
+            .service-card {
+                min-width: 90vw;
+                max-width: 98vw;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="nav">
+            <div class="logo">
+                <div class="logo-img"><span>it</span></div>
+                <span class="logo-title">Kevin IT</span>
+            </div>
+            <div class="menu">
+                <a href="#">All Jobs</a>
+                <a href="#">IT Companies</a>
+                <a href="#">Blog</a>
+            </div>
+        </div>
+        <div class="search-section">
+            <div class="search-title">999+ IT Jobs For <span style="color:#ffb3b3">"Gút"</span> Developers</div>
+            <form class="search-bar" autocomplete="off">
+                <select>
+                    <option>All Cities</option>
+                    <option>Hà Nội</option>
+                    <option>Hồ Chí Minh</option>
+                    <option>Đà Nẵng</option>
+                </select>
+                <input type="text" placeholder="Enter keyword skill (Java, iOS...), job title, company...">
+                <button class="search-btn" type="submit">Search</button>
+            </form>
+        </div>
+        <div class="trending">
+            <div class="trend-tag">Java</div>
+            <div class="trend-tag">ReactJS</div>
+            <div class="trend-tag">.NET</div>
+            <div class="trend-tag">Tester</div>
+            <div class="trend-tag">PHP</div>
+            <div class="trend-tag">Business Analysis</div>
+            <div class="trend-tag">NodeJS</div>
+            <div class="trend-tag">Team Management</div>
+        </div>
+    </div>
+    <div class="services">
+        <div class="service-card">
+            <span class="icon">📥</span>
+            <span class="service-card-title">Passive Job Search</span>
+            <span class="badge">HOT</span>
+            <div class="service-card-desc">Receive job invitations on IT Job Search just by uploading your CV</div>
+            <button class="service-card-btn" onclick="window.location.href='/job-invitation/'">Learn more</button>
+        </div>
+        <div class="service-card">
+            <span class="icon">📄</span>
+            <span class="service-card-title">CV Templates</span>
+            <span class="badge new">NEW</span>
+            <div class="service-card-desc">Generate professional IT CV with new templates - recommended by recruiters</div>
+            <button class="service-card-btn">View templates</button>
+        </div>
+        <div class="service-card">
+            <span class="icon">📝</span>
+            <span class="service-card-title">Blog</span>
+            <div class="service-card-desc">Updates about salary, benefits, working policies, and careers in IT</div>
+            <button class="service-card-btn">Explore blog</button>
+        </div>
+    </div>
+</body>
+</html> 
