@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - IT Job Search</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', Arial, sans-serif;
+            background: #f6f8fa;
+            color: #222;
+        }
+        .login-container {
+            max-width: 420px;
+            margin: 60px auto;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 40px 32px 32px 32px;
+        }
+        .login-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #007cf0;
+            text-align: center;
+            margin-bottom: 18px;
+        }
+        .login-desc {
+            text-align: center;
+            color: #555;
+            margin-bottom: 24px;
+        }
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+        .login-form label {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        .login-form input[type='email'],
+        .login-form input[type='password'] {
+            padding: 10px 12px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Roboto', sans-serif;
+            transition: border 0.2s;
+        }
+        .login-form input:focus {
+            border: 1.5px solid #007cf0;
+            outline: none;
+        }
+        .login-btn {
+            background: #007cf0;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 0;
+            font-size: 1.1rem;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background 0.2s;
+        }
+        .login-btn:hover {
+            background: #0056b3;
+        }
+        .login-error {
+            color: #e60023;
+            background: #fff0f3;
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            text-align: center;
+            font-size: 0.98rem;
+        }
+        .login-link {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 0.98rem;
+        }
+        .login-link a {
+            color: #007cf0;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 600px) {
+            .login-container {
+                padding: 18px 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% include 'navbar.html' %}
+    <div class="login-container">
+        <div class="login-title">Đăng nhập</div>
+        <div class="login-desc">Đăng nhập để tiếp tục sử dụng các tính năng của IT Job Search</div>
+        {% if error %}
+            <div class="login-error">{{ error }}</div>
+        {% endif %}
+        <form class="login-form" method="post">
+            {% csrf_token %}
+            <div>
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required placeholder="Nhập email">
+            </div>
+            <div>
+                <label for="password">Mật khẩu</label>
+                <input type="password" id="password" name="password" required placeholder="Nhập mật khẩu">
+                <div style="text-align:right; margin-top:4px;">
+                    <a href="/forgot-password/" style="color:#007cf0; font-size:0.97rem; text-decoration:none;">Quên mật khẩu?</a>
+                </div>
+            </div>
+            <button class="login-btn" type="submit">Đăng nhập</button>
+        </form>
+        <div class="login-link">
+            Chưa có tài khoản? <a href="#">Đăng ký ngay</a>
+        </div>
+        <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.GET.next|default:'/job-invitation/' }}">Đăng nhập với Google</a>
+    </div>
+</body>
+</html> 
