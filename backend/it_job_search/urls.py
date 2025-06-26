@@ -22,7 +22,7 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-from .views import home, job_invitation, custom_login, register, forgot_password, change_password, logout_user, cv_templates, top_companies
+from .views import home, job_invitation, custom_login, register, forgot_password, change_password, logout_user, cv_templates, top_companies, applied_jobs, update_applied_job, delete_applied_job
 from blog_posts.views import blog_list, blog_detail
 
 urlpatterns = [
@@ -45,4 +45,8 @@ urlpatterns = [
     path('blog/', blog_list, name='blog_list'),
     path('blog/<slug:slug>/', blog_detail, name='blog_detail'),
     path('companies/', top_companies, name='top_companies'),
+    path('user_management/', include('user_management.urls')),
+    path('applied-jobs/', applied_jobs, name='applied_jobs'),
+    path('update-applied-job/', update_applied_job, name='update_applied_job'),
+    path('delete-applied-job/', delete_applied_job, name='delete_applied_job'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

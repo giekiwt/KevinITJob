@@ -5,6 +5,11 @@ from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.decorators import login_required
 from it_job_search.models import ProgrammingLanguage
 from company_profiles.models import Company
+from blog_posts.models import BlogPost
+import os
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
+from datetime import datetime
 
 User = get_user_model()
 
@@ -43,13 +48,45 @@ def register(request):
 
 def home(request):
     languages = ProgrammingLanguage.objects.all()
-    return render(request, 'home.html', {'languages': languages})
+    top_companies = Company.objects.all()[:6]
+    latest_blogs = BlogPost.objects.order_by('-created_at')[:3]
+    return render(request, 'home.html', {'languages': languages, 'top_companies': top_companies, 'latest_blogs': latest_blogs})
 
 def job_invitation(request):
     if not request.user.is_authenticated:
         return redirect(f'/login/?next=/job-invitation/')
-    # Nếu đã đăng nhập, render form nhập thông tin cá nhân + upload CV
-    return render(request, 'job_invitation.html')
+    upload_success = False
+    company_name = ''
+    job_title = ''
+    location = ''
+    company_slug = request.GET.get('company')
+    job_title_param = request.GET.get('job_title')
+    location_param = request.GET.get('location')
+    if company_slug:
+        try:
+            company = Company.objects.get(slug=company_slug)
+            company_name = company.name
+        except Company.DoesNotExist:
+            company_name = ''
+    if job_title_param:
+        job_title = job_title_param
+    if location_param:
+        location = location_param
+    if request.method == 'POST' and request.FILES.get('cv'):
+        cv_file = request.FILES['cv']
+        fs = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'cv_uploads'))
+        filename = fs.save(cv_file.name, cv_file)
+        upload_success = True
+        cvs = request.session.get('uploaded_cvs', [])
+        cvs.append({
+            'filename': filename,
+            'uploaded_at': datetime.now().strftime('%Y-%m-%d %H:%M'),
+            'company': request.POST.get('company', company_name),
+            'job_title': request.POST.get('job_title', job_title),
+            'location': request.POST.get('location', location),
+        })
+        request.session['uploaded_cvs'] = cvs
+    return render(request, 'job_invitation.html', {'upload_success': upload_success, 'company_name': company_name, 'job_title': job_title, 'location': location})
 
 @csrf_protect
 def forgot_password(request):
@@ -99,4 +136,51 @@ def top_companies(request):
     return render(request, 'top_companies.html', {
         'large_companies': large_companies,
         'sme_companies': sme_companies,
-    }) 
+    })
+
+def applied_jobs(request):
+    if not request.user.is_authenticated:
+        return redirect(f'/login/?next=/applied-jobs/')
+    # Lấy danh sách file đã upload từ session
+    applied_list = request.session.get('uploaded_cvs', [])
+    return render(request, 'applied_jobs.html', {'applied_list': applied_list})
+
+@csrf_protect
+@login_required
+def update_applied_job(request):
+    if request.method == 'POST':
+        index = int(request.POST.get('index', -1))
+        company = request.POST.get('company', '')
+        job_title = request.POST.get('job_title', '')
+        location = request.POST.get('location', '')
+        
+        cvs = request.session.get('uploaded_cvs', [])
+        if 0 <= index < len(cvs):
+            cvs[index]['company'] = company
+            cvs[index]['job_title'] = job_title
+            cvs[index]['location'] = location
+            request.session['uploaded_cvs'] = cvs
+            request.session.modified = True
+    
+    return redirect('/applied-jobs/')
+
+@csrf_protect
+@login_required
+def delete_applied_job(request):
+    if request.method == 'POST':
+        index = int(request.POST.get('index', -1))
+        
+        cvs = request.session.get('uploaded_cvs', [])
+        if 0 <= index < len(cvs):
+            # Xóa file từ storage nếu cần
+            filename = cvs[index]['filename']
+            file_path = os.path.join(settings.MEDIA_ROOT, 'cv_uploads', filename)
+            if os.path.exists(file_path):
+                os.remove(file_path)
+            
+            # Xóa khỏi session
+            cvs.pop(index)
+            request.session['uploaded_cvs'] = cvs
+            request.session.modified = True
+    
+    return redirect('/applied-jobs/') 

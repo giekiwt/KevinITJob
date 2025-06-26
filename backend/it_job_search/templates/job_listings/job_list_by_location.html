@@ -34,6 +34,23 @@
         <div class="no-job">Không có việc làm nào tại khu vực này.</div>
         {% endfor %}
     </div>
+    {% if jobs.has_other_pages %}
+    <div class="job-pagination">
+        {% if jobs.has_previous %}
+            <a href="?page={{ jobs.previous_page_number }}" class="page-btn">&laquo; Prev</a>
+        {% endif %}
+        {% for num in jobs.paginator.page_range %}
+            {% if jobs.number == num %}
+                <span class="page-btn page-btn-active">{{ num }}</span>
+            {% elif num > jobs.number|add:'-3' and num < jobs.number|add:'3' %}
+                <a href="?page={{ num }}" class="page-btn">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+        {% if jobs.has_next %}
+            <a href="?page={{ jobs.next_page_number }}" class="page-btn">Next &raquo;</a>
+        {% endif %}
+    </div>
+    {% endif %}
 </div>
 {% endblock %}
 
@@ -58,6 +75,10 @@
 .apply-btn { display: block; text-align: center; background: #d32f2f; color: #fff; font-weight: 600; border: none; border-radius: 8px; padding: 12px 0; font-size: 1.08rem; margin-top: 8px; text-decoration: none; transition: background 0.2s; }
 .apply-btn:hover { background: #b71c1c; }
 .no-job { color: #888; font-size: 1.1rem; text-align: center; padding: 32px 0; }
+.job-pagination { display: flex; gap: 8px; justify-content: center; align-items: center; margin: 32px 0 0 0; }
+.page-btn { display: inline-block; padding: 7px 16px; border-radius: 6px; background: #f6f8fa; color: #1976d2; font-weight: 600; text-decoration: none; font-size: 1rem; transition: background 0.2s, color 0.2s; border: 1.5px solid #eee; }
+.page-btn:hover { background: #1976d2; color: #fff; }
+.page-btn-active { background: #d32f2f; color: #fff; border: 1.5px solid #d32f2f; cursor: default; }
 @media (max-width: 900px) { .job-listing-grid { grid-template-columns: 1fr; } .job-listing-container { padding: 12px; } }
 </style>
 {% endblock %} 

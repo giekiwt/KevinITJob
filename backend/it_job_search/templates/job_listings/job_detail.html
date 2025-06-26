@@ -3,46 +3,277 @@
 {% block title %}{{ job.title }} - {{ job.company.name }}{% endblock %}
 
 {% block content %}
-<div class="container">
-    <a href="javascript:history.back()" class="back-link">&larr; Quay lại</a>
-    <div class="job-title">{{ job.title }}</div>
-    <div class="company">{{ job.company.name }}</div>
-    {% if job.salary_min and job.salary_max %}
-        <div class="salary">Lương: ${{ job.salary_min }} - ${{ job.salary_max }}</div>
-    {% elif job.salary_min %}
-        <div class="salary">Lương: Từ ${{ job.salary_min }}</div>
-    {% else %}
-        <div class="salary">Lương: Thương lượng</div>
-    {% endif %}
-    <div class="location">Địa điểm: {{ job.location.name }}</div>
-    <div class="skills">
-        Kỹ năng:
-        {% for skill in job.skills.all %}
-            <span class="skill-tag">{{ skill.name }}</span>
-        {% endfor %}
+<div class="job-detail-layout">
+    <div class="job-detail-main">
+        <a href="javascript:history.back()" class="back-link">&larr; Quay lại</a>
+        <div class="job-title">{{ job.title }}</div>
+        <div class="company">{{ job.company.name }}</div>
+        {% if job.salary_min and job.salary_max %}
+            <div class="salary">Lương: ${{ job.salary_min }} - ${{ job.salary_max }}</div>
+        {% elif job.salary_min %}
+            <div class="salary">Lương: Từ ${{ job.salary_min }}</div>
+        {% else %}
+            <div class="salary">Lương: Thương lượng</div>
+        {% endif %}
+        <div class="location">Địa điểm: {{ job.location.name }}</div>
+        <div class="skills">
+            Kỹ năng:
+            {% for skill in job.skills.all %}
+                <span class="skill-tag">{{ skill.name }}</span>
+            {% endfor %}
+        </div>
+        <div class="desc"><strong>Mô tả công việc:</strong><br>{{ job.description }}</div>
+        <div class="req"><strong>Yêu cầu:</strong><br>{{ job.requirements }}</div>
+        <div>Ngày đăng: {{ job.posted_at|date:"d/m/Y" }}</div>
+        <div style="margin-top: 28px; text-align: center;">
+            <a href="/job-invitation/?company={{ job.company.slug }}&job_title={{ job.title|urlencode }}&location={{ job.location.name|urlencode }}" style="display:inline-block; background:#d32f2f; color:#fff; font-weight:600; font-size:1.1rem; padding:14px 38px; border-radius:8px; text-decoration:none; box-shadow:0 2px 8px rgba(211,47,47,0.08); transition:background 0.2s;">
+                Apply Now
+            </a>
+        </div>
+        <div class="employee-reviews-block">
+            <h3 class="reviews-title">Đánh giá của nhân viên</h3>
+            <div class="reviews-list">
+                {% for review in reviews %}
+                <div class="review-item">
+                    <img class="review-avatar" src="{{ review.avatar }}" alt="{{ review.name }}">
+                    <div class="review-content">
+                        <div class="review-header">
+                            <span class="review-name">{{ review.name }}</span>
+                            <span class="review-rating">
+                                {% for i in "12345"|slice:":review.rating" %}★{% endfor %}
+                                {% for i in "12345"|slice:"review.rating:" %}<span class="star-empty">★</span>{% endfor %}
+                            </span>
+                        </div>
+                        <div class="review-text">{{ review.content }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
-    <div class="desc"><strong>Mô tả công việc:</strong><br>{{ job.description }}</div>
-    <div class="req"><strong>Yêu cầu:</strong><br>{{ job.requirements }}</div>
-    <div>Ngày đăng: {{ job.posted_at|date:"d/m/Y" }}</div>
-    <div style="margin-top: 28px; text-align: center;">
-        <a href="/job-invitation/" style="display:inline-block; background:#d32f2f; color:#fff; font-weight:600; font-size:1.1rem; padding:14px 38px; border-radius:8px; text-decoration:none; box-shadow:0 2px 8px rgba(211,47,47,0.08); transition:background 0.2s;">
-            Apply Now
-        </a>
-    </div>
+    <aside class="job-detail-aside">
+        <div class="more-jobs-block">
+            <div class="more-jobs-title">More jobs for you</div>
+            <div class="more-jobs-list">
+                {% for j in more_jobs %}
+                <a href="{% url 'job_detail' j.id %}" class="more-job-item">
+                    {% if j.company.logo %}
+                        <img src="{{ j.company.logo.url }}" alt="{{ j.company.name }}" class="more-job-logo">
+                    {% endif %}
+                    <div class="more-job-info">
+                        <div class="more-job-title">{{ j.title }}</div>
+                        <div class="more-job-company">{{ j.company.name }}</div>
+                        <div class="more-job-meta">
+                            {% if j.salary_min and j.salary_max %}
+                                <span class="more-job-salary">${{ j.salary_min }} - ${{ j.salary_max }}</span>
+                            {% elif j.salary_min %}
+                                <span class="more-job-salary">Từ ${{ j.salary_min }}</span>
+                            {% else %}
+                                <span class="more-job-salary">Thương lượng</span>
+                            {% endif %}
+                            <span class="more-job-location">{{ j.location.name }}</span>
+                        </div>
+                    </div>
+                </a>
+                {% empty %}
+                <div class="no-more-jobs">Không có gợi ý công việc liên quan.</div>
+                {% endfor %}
+            </div>
+        </div>
+    </aside>
 </div>
 {% endblock %}
 
 {% block head %}
 <style>
-    .container { max-width: 800px; margin: 40px auto; background: #fff; padding: 32px; border-radius: 10px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
-    .job-title { font-size: 2rem; font-weight: bold; color: #1976d2; margin-bottom: 10px; }
-    .company { font-size: 1.2rem; color: #d32f2f; margin-bottom: 8px; }
-    .salary { color: #388e3c; font-weight: bold; margin-bottom: 8px; }
-    .location { color: #888; margin-bottom: 8px; }
-    .desc, .req { margin-bottom: 18px; }
-    .skills { margin-bottom: 18px; }
-    .skill-tag { display: inline-block; background: #e3e3e3; color: #333; border-radius: 4px; padding: 2px 8px; margin-right: 5px; font-size: 0.95em; }
-    .back-link { color: #1976d2; text-decoration: none; font-weight: 500; }
-    .back-link:hover { text-decoration: underline; }
+.job-detail-layout {
+    display: flex;
+    align-items: flex-start;
+    gap: 36px;
+    max-width: 1200px;
+    margin: 40px auto;
+}
+.job-detail-main {
+    flex: 1 1 0;
+    min-width: 0;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    padding: 32px;
+}
+.job-detail-aside {
+    width: 340px;
+    flex-shrink: 0;
+}
+.more-jobs-block {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(25,118,210,0.07);
+    padding: 22px 18px 18px 18px;
+    margin-bottom: 24px;
+}
+.more-jobs-title {
+    font-size: 1.18rem;
+    font-weight: 700;
+    color: #d32f2f;
+    margin-bottom: 16px;
+    text-align: left;
+}
+.more-jobs-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+.more-job-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #f7f7f7;
+    border-radius: 8px;
+    padding: 10px 12px;
+    text-decoration: none;
+    transition: box-shadow 0.2s, background 0.2s;
+    box-shadow: 0 1px 6px #0001;
+}
+.more-job-item:hover {
+    background: #e3e3e3;
+    box-shadow: 0 4px 16px #1976d233;
+}
+.more-job-logo {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    object-fit: contain;
+    background: #fff;
+    border: 1px solid #eee;
+}
+.more-job-info {
+    flex: 1;
+    min-width: 0;
+}
+.more-job-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #1976d2;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.more-job-company {
+    color: #d32f2f;
+    font-size: 0.98rem;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+.more-job-meta {
+    color: #888;
+    font-size: 0.97rem;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.more-job-salary {
+    color: #388e3c;
+    font-weight: bold;
+}
+.no-more-jobs {
+    color: #888;
+    font-size: 1rem;
+    text-align: center;
+    padding: 18px 0;
+}
+@media (max-width: 1000px) {
+    .job-detail-layout {
+        flex-direction: column;
+        gap: 18px;
+    }
+    .job-detail-aside {
+        width: 100%;
+        margin-top: 18px;
+    }
+}
+@media (max-width: 700px) {
+    .job-detail-main {
+        padding: 12px 6px;
+    }
+    .more-jobs-block {
+        padding: 10px 4px;
+    }
+}
+.container { max-width: 800px; margin: 40px auto; background: #fff; padding: 32px; border-radius: 10px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
+.job-title { font-size: 2rem; font-weight: bold; color: #1976d2; margin-bottom: 10px; }
+.company { font-size: 1.2rem; color: #d32f2f; margin-bottom: 8px; }
+.salary { color: #388e3c; font-weight: bold; margin-bottom: 8px; }
+.location { color: #888; margin-bottom: 8px; }
+.desc, .req { margin-bottom: 18px; }
+.skills { margin-bottom: 18px; }
+.skill-tag { display: inline-block; background: #e3e3e3; color: #333; border-radius: 4px; padding: 2px 8px; margin-right: 5px; font-size: 0.95em; }
+.back-link { color: #1976d2; text-decoration: none; font-weight: 500; }
+.back-link:hover { text-decoration: underline; }
+.employee-reviews-block {
+    max-width: 800px;
+    margin: 36px auto 0 auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(25,118,210,0.07);
+    padding: 28px 32px 18px 32px;
+}
+.reviews-title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #1976d2;
+    margin-bottom: 18px;
+}
+.reviews-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+.review-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    background: #f7f7f7;
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: 0 1px 6px #0001;
+}
+.review-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #eee;
+    box-shadow: 0 1px 4px #0001;
+}
+.review-content {
+    flex: 1;
+    min-width: 0;
+}
+.review-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 4px;
+}
+.review-name {
+    font-weight: 600;
+    color: #d32f2f;
+    font-size: 1.08rem;
+}
+.review-rating {
+    color: #ffc107;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+}
+.star-empty {
+    color: #e0e0e0;
+}
+.review-text {
+    color: #444;
+    font-size: 1.04rem;
+    margin-top: 2px;
+}
 </style>
 {% endblock %} 

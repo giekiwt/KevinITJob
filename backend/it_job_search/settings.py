@@ -81,6 +81,7 @@ TEMPLATES = [
                 'it_job_search.context_processors.companies_context',
                 'it_job_search.context_processors.locations_context',
                 'it_job_search.context_processors.languages_context',
+                'it_job_search.context_processors.user_profile_context',
             ],
         },
     },

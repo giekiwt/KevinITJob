@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block title %}Danh sách việc làm{% endblock %}
+
+{% block head %}
+<style>
+.job-listing-container { max-width: 1200px; margin: 30px auto; background: #fff; padding: 32px 32px 16px 32px; border-radius: 12px; }
+.job-listing-title { font-size: 2rem; margin-bottom: 28px; color: #d32f2f; font-weight: 600; }
+.job-listing-title .highlight { color: #1976d2; }
+.job-listing-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
+.job-card { background: #f9f9f9; border: 1.5px solid #eee; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); padding: 22px 20px 18px 20px; display: flex; flex-direction: column; gap: 12px; transition: all 0.3s ease; cursor: pointer; }
+.job-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.15); border: 1.5px solid #d32f2f; transform: translateY(-4px); }
+.job-card-header { display: flex; align-items: center; gap: 16px; }
+.company-logo { width: 48px; height: 48px; border-radius: 8px; object-fit: cover; background: #fff; border: 1px solid #eee; }
+.company-logo-placeholder { width: 48px; height: 48px; border-radius: 8px; background: #e3e3e3; color: #1976d2; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold; }
+.job-title { font-size: 1.15rem; font-weight: bold; color: #1976d2; margin-bottom: 2px; }
+.company-name { color: #d32f2f; font-size: 1rem; font-weight: 500; }
+.job-card-info { display: flex; gap: 18px; font-size: 1rem; color: #555; margin-bottom: 4px; }
+.salary-green { color: #388e3c; font-weight: bold; }
+.location { color: #888; }
+.job-card-skills { margin-bottom: 8px; }
+.skill-tag { display: inline-block; background: #e3e3e3; color: #333; border-radius: 16px; padding: 3px 12px; margin-right: 6px; font-size: 0.98em; margin-bottom: 4px; }
+.apply-btn { display: block; text-align: center; background: #d32f2f; color: #fff; font-weight: 600; border: none; border-radius: 8px; padding: 12px 0; font-size: 1.08rem; margin-top: 8px; text-decoration: none; transition: background 0.2s; }
+.apply-btn:hover { background: #b71c1c; }
+.no-job { color: #888; font-size: 1.1rem; text-align: center; padding: 32px 0; }
+@media (max-width: 900px) { .job-listing-grid { grid-template-columns: 1fr; } .job-listing-container { padding: 12px; } }
+.job-card-link { text-decoration: none; color: inherit; }
+.job-card-link .apply-btn { pointer-events: none; }
+.job-card-link .apply-btn-wrap { text-align: center; margin-top: 8px; }
+.job-card-link .apply-btn { display: inline-block; background: #d32f2f; color: #fff; font-weight: 600; border: none; border-radius: 8px; padding: 12px 0; font-size: 1.08rem; width: 90%; transition: background 0.2s; text-align: center; }
+.job-card-link:hover .apply-btn { background: #b71c1c; }
+.job-filter-bar { margin-bottom: 24px; display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+.job-filter-select { padding: 8px 12px; border-radius: 6px; border: 1.5px solid #eee; font-size: 1rem; background: #f6f8fa; }
+.job-filter-btn { background: #1976d2; color: #fff; border: none; border-radius: 6px; padding: 8px 22px; font-size: 1rem; font-family: 'Montserrat', sans-serif; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+.job-filter-btn:hover { background: #d32f2f; }
+.job-pagination { display: flex; gap: 8px; justify-content: center; align-items: center; margin: 32px 0 0 0; }
+.page-btn { display: inline-block; padding: 7px 16px; border-radius: 6px; background: #f6f8fa; color: #1976d2; font-weight: 600; text-decoration: none; font-size: 1rem; transition: background 0.2s, color 0.2s; border: 1.5px solid #eee; }
+.page-btn:hover { background: #1976d2; color: #fff; }
+.page-btn-active { background: #d32f2f; color: #fff; border: 1.5px solid #d32f2f; cursor: default; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="job-listing-container">
+    <div class="job-listing-title">Kết quả tìm kiếm: {{ page_obj.paginator.count }} việc làm</div>
+    <form method="get" class="job-filter-bar" style="margin-bottom: 24px; display: flex; gap: 16px; flex-wrap: wrap; align-items: center;">
+        <input type="hidden" name="q" value="{{ q|default:'' }}">
+        <select name="language" class="job-filter-select">
+            <option value="">Ngôn ngữ (All)</option>
+            {% for lang in languages %}
+                <option value="{{ lang.id }}" {% if lang.id|stringformat:'s' == selected_language %}selected{% endif %}>{{ lang.name }}</option>
+            {% endfor %}
+        </select>
+        <select name="company" class="job-filter-select">
+            <option value="">Công ty (All)</option>
+            {% for company in companies %}
+                <option value="{{ company.id }}" {% if company.id|stringformat:'s' == selected_company %}selected{% endif %}>{{ company.name }}</option>
+            {% endfor %}
+        </select>
+        <select name="location" class="job-filter-select">
+            <option value="">Khu vực (All)</option>
+            {% for location in locations %}
+                <option value="{{ location.id }}" {% if location.id|stringformat:'s' == selected_location %}selected{% endif %}>{{ location.name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="job-filter-btn">Lọc</button>
+    </form>
+    <div class="job-listing-grid">
+        {% for job in page_obj %}
+        <a href="{% url 'job_detail' job.id %}" class="job-card job-card-link">
+            <div class="job-card-header">
+                {% if job.company.logo %}
+                    <img src="{{ job.company.logo.url }}" alt="{{ job.company.name }}" class="company-logo" />
+                {% else %}
+                    <div class="company-logo-placeholder">{{ job.company.name|first|upper }}</div>
+                {% endif %}
+                <div>
+                    <div class="job-title">{{ job.title }}</div>
+                    <div class="company-name">{{ job.company.name }}</div>
+                </div>
+            </div>
+            <div class="job-card-info">
+                <div class="salary">
+                    {% if job.salary_min and job.salary_max %}
+                        <span class="salary-green">${{ job.salary_min }} - ${{ job.salary_max }}</span>
+                    {% elif job.salary_min %}
+                        <span class="salary-green">Từ ${{ job.salary_min }}</span>
+                    {% else %}
+                        <span class="salary-green">Thương lượng</span>
+                    {% endif %}
+                </div>
+                <div class="location">{{ job.location.name }}</div>
+            </div>
+            <div class="job-card-skills">
+                {% for skill in job.skills.all %}
+                    <span class="skill-tag">{{ skill.name }}</span>
+                {% endfor %}
+            </div>
+            <div class="apply-btn-wrap"><a href="/job-invitation/?company={{ job.company.slug }}&job_title={{ job.title|urlencode }}&location={{ job.location.name|urlencode }}" class="apply-btn">Apply Now</a></div>
+        </a>
+        {% empty %}
+        <div class="no-job">Không có việc làm nào phù hợp.</div>
+        {% endfor %}
+    </div>
+    {% if page_obj.has_other_pages %}
+    <div class="job-pagination">
+        {% if page_obj.has_previous %}
+            <a href="?{% if q %}q={{ q }}&{% endif %}{% if selected_language %}language={{ selected_language }}&{% endif %}{% if selected_company %}company={{ selected_company }}&{% endif %}{% if selected_location %}location={{ selected_location }}&{% endif %}page={{ page_obj.previous_page_number }}" class="page-btn">&laquo; Prev</a>
+        {% endif %}
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <span class="page-btn page-btn-active">{{ num }}</span>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a href="?{% if q %}q={{ q }}&{% endif %}{% if selected_language %}language={{ selected_language }}&{% endif %}{% if selected_company %}company={{ selected_company }}&{% endif %}{% if selected_location %}location={{ selected_location }}&{% endif %}page={{ num }}" class="page-btn">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+            <a href="?{% if q %}q={{ q }}&{% endif %}{% if selected_language %}language={{ selected_language }}&{% endif %}{% if selected_company %}company={{ selected_company }}&{% endif %}{% if selected_location %}location={{ selected_location }}&{% endif %}page={{ page_obj.next_page_number }}" class="page-btn">Next &raquo;</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %} 

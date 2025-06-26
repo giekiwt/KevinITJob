@@ -3,11 +3,24 @@
 {% block title %}{{ jobs|length }} việc làm tại {{ company }} - Việt Nam{% endblock %}
 
 {% block content %}
+<div class="company-spotlight">
+    {% if company.logo %}
+        <img src="{{ company.logo.url }}" alt="{{ company.name }}" class="company-spotlight-logo">
+    {% else %}
+        <div class="company-spotlight-logo logo-placeholder">{{ company.name|first|upper }}</div>
+    {% endif %}
+    <div class="company-spotlight-info">
+        <h2>{{ company.name }}</h2>
+        {% if company.description %}<p>{{ company.description }}</p>{% endif %}
+        {% if company.location %}<div class="company-location">Địa chỉ: {{ company.location.name }}</div>{% endif %}
+        {% if company.website %}<a href="{{ company.website }}" target="_blank">Website công ty</a>{% endif %}
+    </div>
+</div>
 <div class="job-listing-container">
     <div class="job-listing-title">{{ jobs|length }} việc làm tại <span class="highlight">{{ company }}</span> - Việt Nam</div>
     <div class="job-listing-grid">
         {% for job in jobs %}
-        <div class="job-card">
+        <a href="{% url 'job_detail' job.id %}" class="job-card job-card-link">
             <div class="job-card-header">
                 {% if job.company.logo %}
                     <img src="{{ job.company.logo.url }}" alt="{{ job.company.name }}" class="company-logo" />
@@ -28,12 +41,29 @@
                     <span class="skill-tag">{{ skill.name }}</span>
                 {% endfor %}
             </div>
-            <a href="{% url 'job_detail' job.id %}" class="apply-btn">Apply Now</a>
-        </div>
+            <div class="apply-btn-wrap"><a href="/job-invitation/?company={{ job.company.slug }}&job_title={{ job.title|urlencode }}&location={{ job.location.name|urlencode }}" class="apply-btn">Apply Now</a></div>
+        </a>
         {% empty %}
         <div class="no-job">Không có việc làm nào tại công ty này.</div>
         {% endfor %}
     </div>
+    {% if jobs.has_other_pages %}
+    <div class="job-pagination">
+        {% if jobs.has_previous %}
+            <a href="?page={{ jobs.previous_page_number }}" class="page-btn">&laquo; Prev</a>
+        {% endif %}
+        {% for num in jobs.paginator.page_range %}
+            {% if jobs.number == num %}
+                <span class="page-btn page-btn-active">{{ num }}</span>
+            {% elif num > jobs.number|add:'-3' and num < jobs.number|add:'3' %}
+                <a href="?page={{ num }}" class="page-btn">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+        {% if jobs.has_next %}
+            <a href="?page={{ jobs.next_page_number }}" class="page-btn">Next &raquo;</a>
+        {% endif %}
+    </div>
+    {% endif %}
 </div>
 {% endblock %}
 
@@ -59,5 +89,102 @@
 .apply-btn:hover { background: #b71c1c; }
 .no-job { color: #888; font-size: 1.1rem; text-align: center; padding: 32px 0; }
 @media (max-width: 900px) { .job-listing-grid { grid-template-columns: 1fr; } .job-listing-container { padding: 12px; } }
+.company-spotlight {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    margin-bottom: 36px;
+    padding: 32px 40px;
+    background: linear-gradient(90deg, #f7f7f7 70%, #e3e3e3 100%);
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(25, 118, 210, 0.08);
+    border: 1.5px solid #e0e0e0;
+    position: relative;
+    overflow: hidden;
+}
+.company-spotlight::before {
+    content: "";
+    position: absolute;
+    right: -60px;
+    top: -60px;
+    width: 180px;
+    height: 180px;
+    background: #d32f2f22;
+    border-radius: 50%;
+    z-index: 0;
+}
+.company-spotlight-logo, .company-spotlight .logo-placeholder {
+    width: 88px;
+    height: 88px;
+    border-radius: 14px;
+    object-fit: contain;
+    background: #fff;
+    border: 2px solid #eee;
+    box-shadow: 0 2px 8px #0001;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #1976d2;
+}
+.company-spotlight-info {
+    flex: 1;
+    min-width: 0;
+    z-index: 1;
+}
+.company-spotlight-info h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #1976d2;
+    margin-bottom: 8px;
+    letter-spacing: 0.01em;
+}
+.company-spotlight-info p {
+    color: #444;
+    margin-bottom: 6px;
+    font-size: 1.08rem;
+}
+.company-spotlight-info .company-location {
+    color: #888;
+    font-size: 1rem;
+    margin-bottom: 4px;
+}
+.company-spotlight-info a {
+    color: #d32f2f;
+    text-decoration: underline;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+.company-spotlight-info a:hover {
+    color: #1976d2;
+}
+@media (max-width: 700px) {
+    .company-spotlight {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 18px 10px;
+        gap: 16px;
+    }
+    .company-spotlight-logo, .company-spotlight .logo-placeholder {
+        width: 64px;
+        height: 64px;
+        font-size: 1.5rem;
+    }
+    .company-spotlight-info h2 {
+        font-size: 1.3rem;
+    }
+}
+.job-card-link { text-decoration: none; color: inherit; }
+.job-card-link .apply-btn { pointer-events: none; }
+.job-card-link .apply-btn-wrap { text-align: center; margin-top: 8px; }
+.job-card-link .apply-btn { display: inline-block; background: #d32f2f; color: #fff; font-weight: 600; border: none; border-radius: 8px; padding: 12px 0; font-size: 1.08rem; width: 90%; transition: background 0.2s; text-align: center; }
+.job-card-link:hover .apply-btn { background: #b71c1c; }
+.job-pagination { display: flex; gap: 8px; justify-content: center; align-items: center; margin: 32px 0 0 0; }
+.page-btn { display: inline-block; padding: 7px 16px; border-radius: 6px; background: #f6f8fa; color: #1976d2; font-weight: 600; text-decoration: none; font-size: 1rem; transition: background 0.2s, color 0.2s; border: 1.5px solid #eee; }
+.page-btn:hover { background: #1976d2; color: #fff; }
+.page-btn-active { background: #d32f2f; color: #fff; border: 1.5px solid #d32f2f; cursor: default; }
 </style>
 {% endblock %} 

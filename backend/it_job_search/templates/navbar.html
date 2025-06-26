@@ -20,7 +20,9 @@
                             <a href="#" class="dropdown-item dropdown-main">Công ty <span class="arrow"></span></a>
                             <ul class="dropdown-menu submenu company-menu">
                                 {% for company in companies %}
-                                    <li><a href="{% url 'job_list_by_company' company.slug %}" class="dropdown-item">{{ company.name }}</a></li>
+                                    {% if company.slug %}
+                                        <li><a href="{% url 'job_list_by_company' company.slug %}" class="dropdown-item">{{ company.name }}</a></li>
+                                    {% endif %}
                                 {% endfor %}
                             </ul>
                         </li>
@@ -39,12 +41,22 @@
             </ul>
         </div>
         <div class="navbar-right">
-            <a href="#" class="nav-link nav-employer">Nhà Tuyển Dụng</a>
             <a href="#" class="nav-icon"><i class="fa-regular fa-bell"></i></a>
             {% if user.is_authenticated %}
-                <div class="navbar-avatar" title="{{ user.email }}">
-                    {{ user.email|first|upper }}
-                </div>
+                <a href="/applied-jobs/" class="nav-link" style="font-weight:700;color:#ffb300;"><i class="fa-solid fa-clipboard-check"></i> Đã apply</a>
+                {% if user_profile and user_profile.avatar %}
+                    <a href="/user_management/profile/update/" class="navbar-avatar-link">
+                        <div class="navbar-avatar" title="{{ user.email }}" style="padding:0;overflow:hidden;">
+                            <img src="{{ user_profile.avatar.url }}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;">
+                        </div>
+                    </a>
+                {% else %}
+                    <a href="/user_management/profile/update/" class="navbar-avatar-link">
+                        <div class="navbar-avatar" title="{{ user.email }}">
+                            {{ user.email|first|upper }}
+                        </div>
+                    </a>
+                {% endif %}
                 <span class="navbar-user-email">{{ user.email }}</span>
                 <a href="/logout/" class="nav-link nav-logout">Đăng xuất</a>
             {% else %}
@@ -131,11 +143,6 @@
     display: flex;
     align-items: center;
     gap: 18px;
-}
-.nav-employer {
-    color: #fff;
-    font-weight: 700;
-    margin-right: 8px;
 }
 .nav-icon {
     color: #fff;
@@ -382,4 +389,6 @@ body { padding-top: 60px; }
         width: 100%;
     }
 }
+.navbar-avatar-link { display: inline-block; }
+.navbar-avatar-link:hover .navbar-avatar { cursor: pointer; box-shadow: 0 0 0 3px #d32f2f44; transition: box-shadow 0.2s; }
 </style> 
