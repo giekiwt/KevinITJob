@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ job.title }} - {{ job.company.name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <a href="javascript:history.back()" class="back-link">&larr; Quay lại</a>
+    <div class="job-title">{{ job.title }}</div>
+    <div class="company">{{ job.company.name }}</div>
+    {% if job.salary_min and job.salary_max %}
+        <div class="salary">Lương: ${{ job.salary_min }} - ${{ job.salary_max }}</div>
+    {% elif job.salary_min %}
+        <div class="salary">Lương: Từ ${{ job.salary_min }}</div>
+    {% else %}
+        <div class="salary">Lương: Thương lượng</div>
+    {% endif %}
+    <div class="location">Địa điểm: {{ job.location.name }}</div>
+    <div class="skills">
+        Kỹ năng:
+        {% for skill in job.skills.all %}
+            <span class="skill-tag">{{ skill.name }}</span>
+        {% endfor %}
+    </div>
+    <div class="desc"><strong>Mô tả công việc:</strong><br>{{ job.description }}</div>
+    <div class="req"><strong>Yêu cầu:</strong><br>{{ job.requirements }}</div>
+    <div>Ngày đăng: {{ job.posted_at|date:"d/m/Y" }}</div>
+    <div style="margin-top: 28px; text-align: center;">
+        <a href="/job-invitation/" style="display:inline-block; background:#d32f2f; color:#fff; font-weight:600; font-size:1.1rem; padding:14px 38px; border-radius:8px; text-decoration:none; box-shadow:0 2px 8px rgba(211,47,47,0.08); transition:background 0.2s;">
+            Apply Now
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block head %}
+<style>
+    .container { max-width: 800px; margin: 40px auto; background: #fff; padding: 32px; border-radius: 10px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
+    .job-title { font-size: 2rem; font-weight: bold; color: #1976d2; margin-bottom: 10px; }
+    .company { font-size: 1.2rem; color: #d32f2f; margin-bottom: 8px; }
+    .salary { color: #388e3c; font-weight: bold; margin-bottom: 8px; }
+    .location { color: #888; margin-bottom: 8px; }
+    .desc, .req { margin-bottom: 18px; }
+    .skills { margin-bottom: 18px; }
+    .skill-tag { display: inline-block; background: #e3e3e3; color: #333; border-radius: 4px; padding: 2px 8px; margin-right: 5px; font-size: 0.95em; }
+    .back-link { color: #1976d2; text-decoration: none; font-weight: 500; }
+    .back-link:hover { text-decoration: underline; }
+</style>
+{% endblock %} 

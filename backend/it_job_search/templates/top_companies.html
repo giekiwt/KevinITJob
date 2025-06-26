@@ -1,0 +1,253 @@
+{% extends 'base.html' %}
+{% block title %}Top Công ty IT Việt Nam{% endblock %}
+{% block content %}
+<div class="top-companies-header">
+    <div class="top-companies-title">Vietnam Best IT Companies 2025</div>
+    <div class="top-companies-desc">
+        These top 30 Vietnam IT companies (15 Large, 15 Small & Medium) are recognized to provide the best culture, benefits, working environment, management care and training, selected out of 11,000+ IT companies listed on KietIT.
+    </div>
+    <div class="top-companies-badge">
+    </div>
+</div>
+<div class="top-companies-tabs">
+    <button class="tab-btn active" onclick="showTab('large')">Large Enterprises</button>
+    <button class="tab-btn" onclick="showTab('sme')">Small & Medium Enterprises</button>
+</div>
+<div id="tab-large" class="top-companies-list show">
+    {% for company in large_companies %}
+    <div class="company-card">
+        <div class="company-rank"><span>{{ forloop.counter }}</span></div>
+        <div class="company-logo-wrap">
+            {% if company.logo %}
+                <img src="{{ company.logo.url }}" alt="{{ company.name }}" class="company-logo" />
+            {% else %}
+                <div class="company-logo-placeholder">{{ company.name|first|upper }}</div>
+            {% endif %}
+        </div>
+        <div class="company-info">
+            <div class="company-name">{{ company.name }}</div>
+            <div class="company-review">{{ company.highlight_review|default:"A great place for IT talent!" }}</div>
+            <a href="{% url 'job_list_by_company' company.slug %}" class="company-detail-link">View details</a>
+        </div>
+        <div class="company-rating">
+            <div class="star">⭐</div>
+            <div class="rating-score">{{ company.rating|default:5.0 }}</div>
+            <div class="recommend">
+                <span class="thumb">👍</span>
+                <span>{{ company.recommend_percent|default:100 }}%</span>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<div id="tab-sme" class="top-companies-list">
+    {% for company in sme_companies %}
+    <div class="company-card">
+        <div class="company-rank"><span>{{ forloop.counter }}</span></div>
+        <div class="company-logo-wrap">
+            {% if company.logo %}
+                <img src="{{ company.logo.url }}" alt="{{ company.name }}" class="company-logo" />
+            {% else %}
+                <div class="company-logo-placeholder">{{ company.name|first|upper }}</div>
+            {% endif %}
+        </div>
+        <div class="company-info">
+            <div class="company-name">{{ company.name }}</div>
+            <div class="company-review">{{ company.highlight_review|default:"A great place for IT talent!" }}</div>
+            <a href="{% url 'job_list_by_company' company.slug %}" class="company-detail-link">View details</a>
+        </div>
+        <div class="company-rating">
+            <div class="star">⭐</div>
+            <div class="rating-score">{{ company.rating|default:5.0 }}</div>
+            <div class="recommend">
+                <span class="thumb">👍</span>
+                <span>{{ company.recommend_percent|default:100 }}%</span>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+{% block head %}
+<style>
+.top-companies-header {
+    background: linear-gradient(90deg, #18191a 60%, #4b181b 100%);
+    color: #fff;
+    padding: 36px 0 24px 0;
+    text-align: center;
+    position: relative;
+}
+.top-companies-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+.top-companies-desc {
+    font-size: 1.1rem;
+    margin-bottom: 18px;
+    color: #f3eaea;
+}
+.top-companies-badge img {
+    width: 110px;
+    margin-top: 8px;
+}
+.top-companies-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    margin: 32px 0 18px 0;
+}
+.tab-btn {
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #d32f2f;
+    padding: 10px 32px;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    transition: border 0.2s, color 0.2s;
+}
+.tab-btn.active {
+    color: #fff;
+    border-bottom: 3px solid #d32f2f;
+    background: #d32f2f;
+    border-radius: 8px 8px 0 0;
+}
+.top-companies-list {
+    max-width: 900px;
+    margin: 0 auto 40px auto;
+    display: none;
+}
+.top-companies-list.show {
+    display: block;
+}
+.company-card {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 22px 28px;
+    margin-bottom: 22px;
+    position: relative;
+}
+.company-rank {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    background: #ffc107;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 8px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px #ffc10733;
+}
+.company-logo-wrap {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f7f7f7;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+.company-logo {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: #fff;
+}
+.company-logo-placeholder {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    background: #e3e3e3;
+    color: #1976d2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+.company-info {
+    flex: 1;
+    min-width: 0;
+}
+.company-name {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 4px;
+}
+.company-review {
+    color: #555;
+    font-size: 1rem;
+    margin-bottom: 6px;
+    font-style: italic;
+}
+.company-detail-link {
+    color: #1976d2;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 1rem;
+}
+.company-detail-link:hover {
+    text-decoration: underline;
+}
+.company-rating {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    min-width: 80px;
+}
+.star {
+    font-size: 1.5rem;
+    color: #ffc107;
+}
+.rating-score {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #d32f2f;
+}
+.recommend {
+    color: #388e3c;
+    font-weight: 600;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.thumb {
+    font-size: 1.2rem;
+}
+@media (max-width: 700px) {
+    .company-card { flex-direction: column; align-items: flex-start; padding: 16px 10px; }
+    .company-rating { flex-direction: row; gap: 18px; min-width: 0; }
+    .company-rank { margin-bottom: 8px; }
+    .company-logo-wrap { margin-bottom: 8px; }
+}
+</style>
+<script>
+function showTab(tab) {
+    document.getElementById('tab-large').classList.remove('show');
+    document.getElementById('tab-sme').classList.remove('show');
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    if(tab === 'large') {
+        document.getElementById('tab-large').classList.add('show');
+        document.querySelectorAll('.tab-btn')[0].classList.add('active');
+    } else {
+        document.getElementById('tab-sme').classList.add('show');
+        document.querySelectorAll('.tab-btn')[1].classList.add('active');
+    }
+}
+</script>
+{% endblock %} 

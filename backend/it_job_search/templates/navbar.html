@@ -5,7 +5,35 @@
                 <span class="logo-circle">it</span><span class="logo-text">Kevin IT</span>
             </a>
             <ul class="navbar-links">
-                <li><a href="/" class="nav-link">Việc Làm IT</a></li>
+                <li class="nav-item nav-dropdown">
+                    <a href="#" class="nav-link">Việc Làm IT <span class="arrow">&#9654;</span></a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-submenu">
+                            <a href="#" class="dropdown-item dropdown-main">Ngôn ngữ lập trình <span class="arrow"></span></a>
+                            <ul class="dropdown-menu submenu lang-menu">
+                                {% for lang in languages %}
+                                <li><a href="{% url 'job_list_by_language' lang.slug %}" class="dropdown-item">{{ lang.name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        <li class="dropdown-submenu">
+                            <a href="#" class="dropdown-item dropdown-main">Công ty <span class="arrow"></span></a>
+                            <ul class="dropdown-menu submenu company-menu">
+                                {% for company in companies %}
+                                    <li><a href="{% url 'job_list_by_company' company.slug %}" class="dropdown-item">{{ company.name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        <li class="dropdown-submenu">
+                            <a href="#" class="dropdown-item dropdown-main">Khu vực <span class="arrow"></span></a>
+                            <ul class="dropdown-menu submenu">
+                                {% for location in locations %}
+                                    <li><a href="{% url 'job_list_by_location' location.slug %}" class="dropdown-item">{{ location.name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
                 <li><a href="/companies/" class="nav-link">Top Công ty IT</a></li>
                 <li><a href="/blog/" class="nav-link">Blog</a></li>
             </ul>
@@ -193,4 +221,165 @@
     }
 }
 body { padding-top: 60px; }
+.nav-dropdown { position: relative; }
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 100%;
+    background: #23272b;
+    min-width: 180px;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px #0002;
+    z-index: 100;
+    padding: 8px 0;
+}
+.nav-dropdown:hover .dropdown-menu,
+.nav-dropdown:focus-within .dropdown-menu {
+    display: block;
+}
+.dropdown-item {
+    color: #fff;
+    padding: 10px 18px;
+    display: block;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.2s, color 0.2s;
+    transition: background 0.25s cubic-bezier(0.4,0,0.2,1), color 0.25s cubic-bezier(0.4,0,0.2,1);
+    border-radius: 4px;
+    margin: 2px 0;
+}
+.dropdown-item:hover {
+    background: #007cf0;
+    color: #fff;
+    transform: translateX(2px) scale(1.02);
+    box-shadow: 0 2px 8px rgba(0,124,240,0.15);
+}
+.arrow {
+    font-size: 0.9em;
+    margin-left: 6px;
+}
+.dropdown-submenu { position: relative; }
+.dropdown-submenu > .dropdown-menu.submenu {
+    left: 100%;
+    top: 0;
+    margin-left: 2px;
+    min-width: 180px;
+    display: none;
+    position: absolute;
+    background: #23272b;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px #0002;
+    z-index: 200;
+}
+.dropdown-submenu:hover > .dropdown-menu.submenu,
+.dropdown-submenu:focus-within > .dropdown-menu.submenu {
+    display: block;
+}
+.dropdown-main {
+    font-size: 1rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.dropdown-menu > .dropdown-submenu > .dropdown-item {
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 10px 18px;
+    min-width: 170px;
+}
+.dropdown-menu > .dropdown-submenu > .dropdown-item .arrow {
+    float: right;
+    margin-left: 10px;
+}
+.dropdown-menu > .dropdown-submenu > .dropdown-item {
+    background: none;
+    width: 100%;
+}
+.dropdown-menu > .dropdown-submenu > .dropdown-item:hover {
+    background: #007cf0;
+    color: #fff;
+}
+.company-menu {
+    display: grid;
+    grid-auto-flow: column;         /* Chạy theo cột */
+    grid-auto-rows: auto;
+    grid-template-rows: repeat(5, auto); /* 5 dòng */
+    gap: 8px 24px;
+    padding: 12px;
+    background: #23272b;
+}
+.company-menu li {
+    margin: 0;
+}
+.lang-menu {
+    min-width: 260px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 12px;
+}
+.lang-menu li {
+    margin-bottom: 0;
+}
+.lang-menu .dropdown-item {
+    font-size: 0.98rem;
+    padding: 8px 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+}
+.company-menu .dropdown-item {
+    font-size: 0.98rem;
+    padding: 8px 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+}
+.dropdown-menu {
+    min-width: 180px;
+}
+@media (max-width: 900px) {
+    .dropdown-menu, .dropdown-menu.submenu, .company-menu, .lang-menu {
+        position: static;
+        min-width: 100%;
+        box-shadow: none;
+        border-radius: 0;
+        display: block;
+    }
+    .company-menu, .lang-menu {
+        display: block;
+        padding: 8px;
+    }
+    .lang-menu li {
+        width: 100%;
+    }
+}
+.navbar-links, .dropdown-menu, .dropdown-menu ul, .dropdown-menu li, .company-menu, .lang-menu {
+    list-style: none !important;
+    padding-left: 0 !important;
+    margin: 0;
+}
+.dropdown-menu li, .company-menu li, .lang-menu li {
+    list-style: none !important;
+}
+.company-menu, .lang-menu {
+    min-width: 320px;
+}
+.company-menu li, .lang-menu li {
+    margin-bottom: 4px;
+}
+@media (max-width: 900px) {
+    .company-menu, .lang-menu {
+        display: block;
+        width: 100%;
+        min-width: 100%;
+    }
+    .company-menu li, .lang-menu li {
+        width: 100%;
+    }
+}
 </style> 

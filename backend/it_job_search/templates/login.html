@@ -6,6 +6,7 @@
     <title>Đăng nhập - IT Job Search</title>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
     <style>
         body {
             margin: 0;
@@ -14,44 +15,62 @@
             background: #f6f8fa;
             color: #222;
         }
-        .login-container {
-            max-width: 420px;
-            margin: 60px auto;
+        .login-main {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f6f8fa;
+        }
+        .login-split {
+            display: flex;
+            width: 720px;
+            min-height: 420px;
             background: #fff;
-            border-radius: 16px;
+            border-radius: 18px;
             box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        .login-left {
+            flex: 1.1;
             padding: 40px 32px 32px 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         .login-title {
             font-family: 'Montserrat', sans-serif;
-            font-size: 1.7rem;
+            font-size: 2rem;
             font-weight: 700;
-            color: #007cf0;
-            text-align: center;
+            color: #222;
             margin-bottom: 18px;
-        }
-        .login-desc {
-            text-align: center;
-            color: #555;
-            margin-bottom: 24px;
+            text-align: left;
         }
         .login-form {
             display: flex;
             flex-direction: column;
-            gap: 18px;
+            gap: 0;
         }
         .login-form label {
             font-weight: 500;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
+            display: block;
+        }
+        .login-form > div {
+            margin-bottom: 12px;
         }
         .login-form input[type='email'],
         .login-form input[type='password'] {
-            padding: 10px 12px;
+            padding: 12px 14px;
             border: 1.5px solid #e0e0e0;
             border-radius: 8px;
             font-size: 1rem;
             font-family: 'Roboto', sans-serif;
             transition: border 0.2s;
+            width: 100%;
+            box-sizing: border-box;
+            height: 44px;
+            margin-bottom: 0;
         }
         .login-form input:focus {
             border: 1.5px solid #007cf0;
@@ -69,6 +88,8 @@
             cursor: pointer;
             margin-top: 8px;
             transition: background 0.2s;
+            width: 100%;
+            height: 48px;
         }
         .login-btn:hover {
             background: #0056b3;
@@ -95,40 +116,142 @@
         .login-link a:hover {
             text-decoration: underline;
         }
+        .login-social {
+            margin-top: 18px;
+            text-align: center;
+        }
+        .login-social span {
+            color: #888;
+            font-size: 0.98rem;
+        }
+        .social-btns {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+        }
+        .social-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: #fff;
+            background: #888;
+            transition: background 0.2s;
+            cursor: pointer;
+        }
+        .social-btn.facebook { background: #1877f3; }
+        .social-btn.google { background: #ea4335; }
+        .social-btn.linkedin { background: #0077b5; }
+        .social-btn:hover { filter: brightness(1.1); }
+        .login-forgot {
+            text-align: right;
+            margin-top: 4px;
+        }
+        .login-forgot a {
+            color: #007cf0;
+            font-size: 0.97rem;
+            text-decoration: none;
+        }
+        .login-forgot a:hover { text-decoration: underline; }
+        .login-right {
+            flex: 1;
+            background: linear-gradient(135deg, #007cf0 60%, #00c6ff 100%);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 32px 24px;
+        }
+        .welcome-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        .welcome-desc {
+            font-size: 1.05rem;
+            text-align: center;
+            margin-bottom: 18px;
+        }
+        .welcome-signup {
+            margin-top: 18px;
+            text-align: center;
+        }
+        .welcome-signup a {
+            color: #fff;
+            background: rgba(0,0,0,0.12);
+            padding: 8px 22px;
+            border-radius: 22px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .welcome-signup a:hover {
+            background: #fff;
+            color: #007cf0;
+        }
+        @media (max-width: 900px) {
+            .login-split { flex-direction: column; width: 98vw; min-width: 0; }
+            .login-right { min-height: 180px; }
+        }
         @media (max-width: 600px) {
-            .login-container {
-                padding: 18px 4px;
-            }
+            .login-left, .login-right { padding: 18px 4px; }
+            .login-title { font-size: 1.2rem; }
         }
     </style>
 </head>
 <body>
     {% include 'navbar.html' %}
-    <div class="login-container">
-        <div class="login-title">Đăng nhập</div>
-        <div class="login-desc">Đăng nhập để tiếp tục sử dụng các tính năng của IT Job Search</div>
-        {% if error %}
-            <div class="login-error">{{ error }}</div>
-        {% endif %}
-        <form class="login-form" method="post">
-            {% csrf_token %}
-            <div>
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required placeholder="Nhập email">
-            </div>
-            <div>
-                <label for="password">Mật khẩu</label>
-                <input type="password" id="password" name="password" required placeholder="Nhập mật khẩu">
-                <div style="text-align:right; margin-top:4px;">
-                    <a href="/forgot-password/" style="color:#007cf0; font-size:0.97rem; text-decoration:none;">Quên mật khẩu?</a>
+    <div class="login-main">
+        <div class="login-split">
+            <div class="login-left">
+                <div class="login-title">Đăng nhập</div>
+                {% if error %}
+                    <div class="login-error">{{ error }}</div>
+                {% endif %}
+                <form class="login-form" method="post">
+                    {% csrf_token %}
+                    <div>
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required placeholder="Nhập email">
+                    </div>
+                    <div>
+                        <label for="password">Mật khẩu</label>
+                        <input type="password" id="password" name="password" required placeholder="Nhập mật khẩu">
+                        <div class="login-forgot">
+                            <a href="/forgot-password/">Quên mật khẩu?</a>
+                        </div>
+                    </div>
+                    <button class="login-btn" type="submit">Đăng nhập</button>
+                </form>
+                <div class="login-social">
+                    <span>hoặc đăng nhập với</span>
+                    <div style="margin-top: 14px; display: flex; justify-content: center;">
+                        <a class="social-btn google" href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.GET.next|default:'/job-invitation/' }}" style="background: #ea4335; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 1.5rem; box-shadow: 0 2px 8px #eee; transition: box-shadow 0.2s;">
+                            <i class="fab fa-google"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="login-link">
+                    Chưa có tài khoản? <a href="/register/">Đăng ký ngay</a>
                 </div>
             </div>
-            <button class="login-btn" type="submit">Đăng nhập</button>
-        </form>
-        <div class="login-link">
-            Chưa có tài khoản? <a href="#">Đăng ký ngay</a>
+            <div class="login-right">
+                <div class="welcome-title">Welcome back!</div>
+                <div class="welcome-desc">
+                    Welcome back! We are so happy to have you here. It's great to see you again. We hope you had a safe and enjoyable time away.
+                </div>
+                <div class="welcome-signup">
+                    No account yet? <a href="/register/">Signup.</a>
+                </div>
+            </div>
         </div>
-        <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.GET.next|default:'/job-invitation/' }}">Đăng nhập với Google</a>
     </div>
 </body>
 </html> 
