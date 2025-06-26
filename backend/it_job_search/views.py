@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from it_job_search.models import ProgrammingLanguage
 from company_profiles.models import Company
 from blog_posts.models import BlogPost
+from job_listings.models import ApplyJob, Job
 import os
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
@@ -74,18 +75,20 @@ def job_invitation(request):
         location = location_param
     if request.method == 'POST' and request.FILES.get('cv'):
         cv_file = request.FILES['cv']
-        fs = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'cv_uploads'))
-        filename = fs.save(cv_file.name, cv_file)
+        company_name = request.POST.get('company', company_name)
+        job_title = request.POST.get('job_title', job_title)
+        location = request.POST.get('location', location)
+        company_obj = Company.objects.filter(name=company_name).first()
+        job_obj = Job.objects.filter(title=job_title, company=company_obj).first()
+        ApplyJob.objects.create(
+            user=request.user,
+            company=company_obj,
+            job=job_obj,
+            job_title=job_title,
+            location=location,
+            cv_file=cv_file
+        )
         upload_success = True
-        cvs = request.session.get('uploaded_cvs', [])
-        cvs.append({
-            'filename': filename,
-            'uploaded_at': datetime.now().strftime('%Y-%m-%d %H:%M'),
-            'company': request.POST.get('company', company_name),
-            'job_title': request.POST.get('job_title', job_title),
-            'location': request.POST.get('location', location),
-        })
-        request.session['uploaded_cvs'] = cvs
     return render(request, 'job_invitation.html', {'upload_success': upload_success, 'company_name': company_name, 'job_title': job_title, 'location': location})
 
 @csrf_protect
@@ -141,46 +144,37 @@ def top_companies(request):
 def applied_jobs(request):
     if not request.user.is_authenticated:
         return redirect(f'/login/?next=/applied-jobs/')
-    # Lấy danh sách file đã upload từ session
-    applied_list = request.session.get('uploaded_cvs', [])
+    applied_list = ApplyJob.objects.filter(user=request.user).order_by('-uploaded_at')
     return render(request, 'applied_jobs.html', {'applied_list': applied_list})
 
 @csrf_protect
 @login_required
 def update_applied_job(request):
     if request.method == 'POST':
-        index = int(request.POST.get('index', -1))
+        apply_id = request.POST.get('apply_id')
         company = request.POST.get('company', '')
         job_title = request.POST.get('job_title', '')
         location = request.POST.get('location', '')
-        
-        cvs = request.session.get('uploaded_cvs', [])
-        if 0 <= index < len(cvs):
-            cvs[index]['company'] = company
-            cvs[index]['job_title'] = job_title
-            cvs[index]['location'] = location
-            request.session['uploaded_cvs'] = cvs
-            request.session.modified = True
-    
+        apply = ApplyJob.objects.filter(id=apply_id, user=request.user).first()
+        if apply:
+            company_obj = Company.objects.filter(name=company).first()
+            job_obj = Job.objects.filter(title=job_title, company=company_obj).first()
+            apply.company = company_obj
+            apply.job = job_obj
+            apply.job_title = job_title
+            apply.location = location
+            apply.save()
     return redirect('/applied-jobs/')
 
 @csrf_protect
 @login_required
 def delete_applied_job(request):
     if request.method == 'POST':
-        index = int(request.POST.get('index', -1))
-        
-        cvs = request.session.get('uploaded_cvs', [])
-        if 0 <= index < len(cvs):
-            # Xóa file từ storage nếu cần
-            filename = cvs[index]['filename']
-            file_path = os.path.join(settings.MEDIA_ROOT, 'cv_uploads', filename)
-            if os.path.exists(file_path):
-                os.remove(file_path)
-            
-            # Xóa khỏi session
-            cvs.pop(index)
-            request.session['uploaded_cvs'] = cvs
-            request.session.modified = True
-    
+        apply_id = request.POST.get('apply_id')
+        apply = ApplyJob.objects.filter(id=apply_id, user=request.user).first()
+        if apply:
+            # Xóa file vật lý
+            if apply.cv_file and os.path.exists(apply.cv_file.path):
+                os.remove(apply.cv_file.path)
+            apply.delete()
     return redirect('/applied-jobs/') 

@@ -1,6 +1,7 @@
 from django.db import models
 from company_profiles.models import Company, Location
 from it_job_search.models import ProgrammingLanguage
+from django.conf import settings
 
 class Job(models.Model):
     title = models.CharField(max_length=200)
@@ -14,3 +15,15 @@ class Job(models.Model):
     posted_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return f"{self.title} - {self.company.name}"
+
+class ApplyJob(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.SET_NULL, null=True)
+    job = models.ForeignKey('Job', on_delete=models.SET_NULL, null=True, blank=True)
+    job_title = models.CharField(max_length=255)
+    location = models.CharField(max_length=255)
+    cv_file = models.FileField(upload_to='cv_uploads/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.email} - {self.job_title} - {self.company}"

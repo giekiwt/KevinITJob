@@ -58,22 +58,26 @@
             <tr><th>Tên file</th><th>Ngày upload</th><th>Công ty đã apply</th><th>Vị trí đã apply</th><th>Khu vực</th><th>Tải về</th><th>Thao tác</th></tr>
             {% for item in applied_list %}
             <tr>
-                <td>{{ item.filename }}</td>
-                <td>{{ item.uploaded_at }}</td>
+                <td>{{ item.cv_file.name|cut:'cv_uploads/' }}</td>
+                <td>{{ item.uploaded_at|date:"Y-m-d H:i" }}</td>
                 <td>{% if item.company %}{{ item.company }}{% else %}-{% endif %}</td>
                 <td>{% if item.job_title %}{{ item.job_title }}{% else %}-{% endif %}</td>
                 <td>{% if item.location %}{{ item.location }}{% else %}-{% endif %}</td>
                 <td>
-                    <a href="/media/cv_uploads/{{ item.filename }}" class="download-btn" download="{{ item.filename }}">
+                    <a href="{{ item.cv_file.url }}" class="download-btn" download="{{ item.cv_file.name|cut:'cv_uploads/' }}">
                         <i class="fa-solid fa-download"></i> Tải về
                     </a>
                 </td>
                 <td>
                     <div class="action-group">
-                        <button class="action-btn edit-btn" onclick="openEditModal({{ forloop.counter0 }})">
+                        <button class="action-btn edit-btn" onclick="openEditModal(this)" 
+                            data-id="{{ item.id }}" 
+                            data-company="{{ item.company|default_if_none:'' }}" 
+                            data-job_title="{{ item.job_title|default_if_none:'' }}" 
+                            data-location="{{ item.location|default_if_none:'' }}">
                             <i class="fa-solid fa-edit"></i> Sửa
                         </button>
-                        <button class="action-btn delete-btn" onclick="deleteItem({{ forloop.counter0 }})">
+                        <button class="action-btn delete-btn" onclick="deleteItem(this)" data-id="{{ item.id }}">
                             <i class="fa-solid fa-trash"></i> Xóa
                         </button>
                     </div>
@@ -85,8 +89,6 @@
         </table>
     </div>
 
-    {{ applied_list|json_script:"applied-data" }}
-
     <!-- Edit Modal -->
     <div id="editModal" class="modal">
         <div class="modal-content">
@@ -96,7 +98,7 @@
             </div>
             <form id="editForm" method="POST" action="/update-applied-job/">
                 {% csrf_token %}
-                <input type="hidden" id="editIndex" name="index">
+                <input type="hidden" id="editApplyId" name="apply_id">
                 <div class="form-group">
                     <label for="editCompany">Công ty:</label>
                     <input type="text" id="editCompany" name="company" required>
@@ -133,68 +135,58 @@
     </div>
 
     <script>
-        const appliedData = JSON.parse(document.getElementById('applied-data').textContent);
-        let currentEditIndex = -1;
-        let currentDeleteIndex = -1;
+        let currentEditId = null;
+        let currentDeleteId = null;
 
-        function openEditModal(index) {
-            currentEditIndex = index;
-            const item = appliedData[index];
-            document.getElementById('editIndex').value = index;
-            document.getElementById('editCompany').value = item.company || '';
-            document.getElementById('editJobTitle').value = item.job_title || '';
-            document.getElementById('editLocation').value = item.location || '';
+        function openEditModal(btn) {
+            const id = btn.getAttribute('data-id');
+            const company = btn.getAttribute('data-company');
+            const job_title = btn.getAttribute('data-job_title');
+            const location = btn.getAttribute('data-location');
+            currentEditId = id;
+            document.getElementById('editApplyId').value = id;
+            document.getElementById('editCompany').value = company || '';
+            document.getElementById('editJobTitle').value = job_title || '';
+            document.getElementById('editLocation').value = location || '';
             document.getElementById('editModal').style.display = 'block';
         }
-
         function closeEditModal() {
             document.getElementById('editModal').style.display = 'none';
-            currentEditIndex = -1;
+            currentEditId = null;
         }
-
-        function deleteItem(index) {
-            currentDeleteIndex = index;
+        function deleteItem(btn) {
+            const id = btn.getAttribute('data-id');
+            currentDeleteId = id;
             document.getElementById('deleteModal').style.display = 'block';
         }
-
         function closeDeleteModal() {
             document.getElementById('deleteModal').style.display = 'none';
-            currentDeleteIndex = -1;
+            currentDeleteId = null;
         }
-
         function confirmDelete() {
-            if (currentDeleteIndex !== -1) {
+            if (currentDeleteId !== null) {
                 const form = document.createElement('form');
                 form.method = 'POST';
                 form.action = '/delete-applied-job/';
-                
                 const csrfToken = document.createElement('input');
                 csrfToken.type = 'hidden';
                 csrfToken.name = 'csrfmiddlewaretoken';
                 csrfToken.value = document.querySelector('[name=csrfmiddlewaretoken]').value;
-                
-                const indexInput = document.createElement('input');
-                indexInput.type = 'hidden';
-                indexInput.name = 'index';
-                indexInput.value = currentDeleteIndex;
-                
+                const idInput = document.createElement('input');
+                idInput.type = 'hidden';
+                idInput.name = 'apply_id';
+                idInput.value = currentDeleteId;
                 form.appendChild(csrfToken);
-                form.appendChild(indexInput);
+                form.appendChild(idInput);
                 document.body.appendChild(form);
                 form.submit();
             }
         }
-
-        // Close modals when clicking outside
         window.onclick = function(event) {
             const editModal = document.getElementById('editModal');
             const deleteModal = document.getElementById('deleteModal');
-            if (event.target === editModal) {
-                closeEditModal();
-            }
-            if (event.target === deleteModal) {
-                closeDeleteModal();
-            }
+            if (event.target === editModal) closeEditModal();
+            if (event.target === deleteModal) closeDeleteModal();
         }
     </script>
 </body>
