@@ -60,13 +60,13 @@
     <!-- Job List -->
     <div class="space-y-4">
         {% for job in page_obj %}
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+        <a href="{% url 'job_detail' job.id %}" class="block bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow hover:border-blue-300">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between">
                 <div class="flex-1">
                     <div class="flex items-start justify-between mb-3">
                         <div>
-                            <h3 class="text-xl font-semibold text-gray-900 mb-1">
-                                <a href="#" class="hover:text-blue-600 transition-colors">{{ job.title }}</a>
+                            <h3 class="text-xl font-semibold text-gray-900 mb-1 hover:text-blue-600 transition-colors">
+                                {{ job.title }}
                             </h3>
                             <p class="text-gray-600 font-medium">{{ job.company.name }}</p>
                         </div>
@@ -112,12 +112,12 @@
                 </div>
                 
                 <div class="mt-4 md:mt-0 md:ml-6">
-                    <button class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                    <span class="inline-block bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors">
                         Ứng tuyển ngay
-                    </button>
+                    </span>
                 </div>
             </div>
-        </div>
+        </a>
         {% empty %}
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
             <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
