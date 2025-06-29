@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Danh sách việc làm{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'job_card.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="job-listing-container">
+    <div class="job-listing-title">Danh sách <span class="highlight">việc làm IT</span></div>
+    
+    <!-- Search and Filter Bar -->
+    <div class="job-filter-bar">
+        <form method="get" style="display: flex; gap: 16px; flex-wrap: wrap; align-items: center; width: 100%;">
+            <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Tìm kiếm việc làm..." style="padding: 8px 12px; border-radius: 6px; border: 1.5px solid #eee; font-size: 1rem; min-width: 200px;">
+            <select name="location" class="job-filter-select">
+                <option value="">Tất cả địa điểm</option>
+                {% for location in locations %}
+                <option value="{{ location.slug }}" {% if request.GET.location == location.slug %}selected{% endif %}>{{ location.name }}</option>
+                {% endfor %}
+            </select>
+            <select name="language" class="job-filter-select">
+                <option value="">Tất cả ngôn ngữ</option>
+                {% for language in languages %}
+                <option value="{{ language.slug }}" {% if request.GET.language == language.slug %}selected{% endif %}>{{ language.name }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="job-filter-btn">Tìm kiếm</button>
+            {% if request.GET.q or request.GET.location or request.GET.language %}
+            <a href="{% url 'job_list' %}" style="color: #888; text-decoration: none; font-size: 0.9rem;">Xóa bộ lọc</a>
+            {% endif %}
+        </form>
+    </div>
+    
+    <div class="job-listing-grid">
+        {% for job in page_obj %}
+        <a href="{% url 'job_detail' job.id %}" class="job-card job-card-link">
+            <div class="job-card-header">
+                {% if job.company.logo %}
+                    <img src="{{ job.company.logo.url }}" alt="{{ job.company.name }}" class="company-logo" />
+                {% else %}
+                    <div class="company-logo-placeholder">{{ job.company.name|first|upper }}</div>
+                {% endif %}
+                <div>
+                    <div class="job-title">{{ job.title }}</div>
+                    <div class="company-name">{{ job.company.name }}</div>
+                </div>
+            </div>
+            <div class="job-card-info">
+                <div class="salary">
+                    {% if job.salary_min and job.salary_max %}
+                        <span class="salary-green">${{ job.salary_min }} - ${{ job.salary_max }}</span>
+                    {% elif job.salary_min %}
+                        <span class="salary-green">Từ ${{ job.salary_min }}</span>
+                    {% else %}
+                        <span class="salary-green">Thương lượng</span>
+                    {% endif %}
+                </div>
+                <div class="location">{{ job.location.name }}</div>
+            </div>
+            <div class="job-card-skills">
+                {% for skill in job.skills.all %}
+                    <span class="skill-tag">{{ skill.name }}</span>
+                {% endfor %}
+            </div>
+            <div class="apply-btn-wrap"><a href="/job-invitation/?company={{ job.company.slug }}&job_title={{ job.title|urlencode }}&location={{ job.location.name|urlencode }}" class="apply-btn">Apply Now</a></div>
+        </a>
+        {% empty %}
+        <div class="no-job">Không có việc làm nào phù hợp.</div>
+        {% endfor %}
+    </div>
+    {% if page_obj.has_other_pages %}
+    <div class="job-pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.location %}&location={{ request.GET.location }}{% endif %}{% if request.GET.language %}&language={{ request.GET.language }}{% endif %}" class="page-btn">&laquo; Prev</a>
+        {% endif %}
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <span class="page-btn page-btn-active">{{ num }}</span>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.location %}&location={{ request.GET.location }}{% endif %}{% if request.GET.language %}&language={{ request.GET.language }}{% endif %}" class="page-btn">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.location %}&location={{ request.GET.location }}{% endif %}{% if request.GET.language %}&language={{ request.GET.language }}{% endif %}" class="page-btn">Next &raquo;</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %} 

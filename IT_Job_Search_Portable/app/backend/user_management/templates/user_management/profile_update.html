@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block title %}Cập nhật ảnh đại diện{% endblock %}
+
+{% block content %}
+<div class="profile-update-container">
+    <h2>Cập nhật ảnh đại diện</h2>
+    <form method="post" enctype="multipart/form-data" class="profile-form">
+        {% csrf_token %}
+        <div class="avatar-preview">
+            {% if profile.avatar %}
+                <img src="{{ profile.avatar.url }}" alt="Avatar" class="avatar-img">
+            {% else %}
+                <div class="avatar-placeholder">No avatar</div>
+            {% endif %}
+        </div>
+        {{ form.as_p }}
+        <button type="submit" class="btn-update">Cập nhật</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block head %}
+<style>
+body {
+    background: linear-gradient(120deg, #f7f7f7 60%, #e3e3e3 100%);
+}
+.profile-update-container {
+    max-width: 420px;
+    margin: 60px auto 0 auto;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 32px #1976d233;
+    padding: 38px 32px 32px 32px;
+    text-align: center;
+    position: relative;
+    animation: fadeInUp 0.7s;
+}
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px);}
+    to { opacity: 1; transform: translateY(0);}
+}
+.profile-update-container h2 {
+    color: #1976d2;
+    margin-bottom: 28px;
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+}
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    align-items: center;
+}
+.avatar-preview {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+.avatar-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #1976d2;
+    box-shadow: 0 2px 12px #1976d233;
+    margin-bottom: 8px;
+    transition: box-shadow 0.2s;
+}
+.avatar-img:hover {
+    box-shadow: 0 4px 24px #d32f2f44;
+}
+.avatar-placeholder {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: #e3e3e3;
+    color: #888;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+input[type='file'] {
+    border: none;
+    background: #f6f8fa;
+    padding: 8px 0;
+    font-size: 1rem;
+    border-radius: 6px;
+    width: 100%;
+}
+.btn-update {
+    background: #1976d2;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px #1976d233;
+    margin-top: 10px;
+    width: 100%;
+}
+.btn-update:hover {
+    background: #d32f2f;
+    box-shadow: 0 4px 16px #d32f2f33;
+}
+.profile-form label {
+    font-weight: 500;
+    color: #1976d2;
+    margin-bottom: 4px;
+}
+.profile-form p {
+    margin: 0 0 8px 0;
+    width: 100%;
+    text-align: left;
+}
+@media (max-width: 600px) {
+    .profile-update-container {
+        padding: 16px 4px;
+    }
+    .avatar-img, .avatar-placeholder {
+        width: 80px;
+        height: 80px;
+    }
+}
+</style>
+{% endblock %} 

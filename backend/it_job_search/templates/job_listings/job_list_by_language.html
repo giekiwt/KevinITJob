@@ -29,7 +29,7 @@
                         </div>
                         <div class="job-card-skills">
                             {% for skill in job.skills.all %}
-                                <span class="skill-tag">{{ skill.name }}</span>
+                                <a href="{% url 'job_list_by_language' skill.slug %}" class="skill-tag">{{ skill.name }}</a>
                             {% endfor %}
                         </div>
                     </div>

@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passive Job Search - IT Job Search</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+    <style>
+        :root {
+            --main-blue: #007cf0;
+            --main-purple: #7928ca;
+            --main-orange: #ff9800;
+            --main-bg: #f6f8fa;
+            --main-white: #fff;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', Arial, sans-serif;
+            background: var(--main-bg);
+            color: #222;
+        }
+        .container {
+            max-width: 950px;
+            margin: 40px auto;
+            background: var(--main-white);
+            border-radius: 20px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 48px 48px 40px 48px;
+        }
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.3rem;
+            color: var(--main-blue);
+            margin-bottom: 10px;
+            text-align: center;
+            letter-spacing: 0.01em;
+        }
+        .desc {
+            color: #555;
+            margin-bottom: 28px;
+            text-align: center;
+            font-size: 1.08rem;
+        }
+        .upload-section {
+            margin-bottom: 36px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .upload-label {
+            font-weight: 700;
+            margin-bottom: 12px;
+            font-size: 1.18rem;
+            color: var(--main-blue);
+            text-align: center;
+        }
+        .upload-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+            width: 100%;
+        }
+        .upload-form input[type='file'] {
+            display: none;
+        }
+        .custom-file-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #e3f0ff;
+            color: var(--main-orange);
+            border: 2px dashed var(--main-orange);
+            border-radius: 10px;
+            padding: 18px 38px;
+            font-size: 1.13rem;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s, border 0.2s;
+        }
+        .custom-file-label:hover {
+            background: #fff3e0;
+            border: 2px solid var(--main-orange);
+        }
+        .upload-btn {
+            background: var(--main-orange);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 16px 44px;
+            font-size: 1.15rem;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 8px;
+            box-shadow: 0 2px 8px rgba(255,152,0,0.08);
+            transition: background 0.2s, transform 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .upload-btn:hover {
+            background: #f57c00;
+            transform: translateY(-2px) scale(1.03);
+        }
+        .file-name {
+            margin-top: 8px;
+            color: var(--main-blue);
+            font-size: 1rem;
+            font-style: italic;
+        }
+        .upload-guide {
+            margin-top: 18px;
+            color: #555;
+            font-size: 1.01rem;
+            text-align: center;
+        }
+        .steps {
+            margin-bottom: 36px;
+            margin-top: 18px;
+        }
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+        .step-number {
+            background: var(--main-purple);
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.18rem;
+        }
+        .step-content {
+            flex: 1;
+        }
+        .step-title {
+            font-weight: 700;
+            color: var(--main-blue);
+            font-size: 1.08rem;
+        }
+        .testimonials {
+            margin-top: 48px;
+            margin-bottom: 24px;
+        }
+        .testimonials-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 32px;
+            color: #222;
+        }
+        .testimonials-title .highlight {
+            color: #007cf0;
+            background: linear-gradient(90deg, #007cf0 60%, #c5bbbb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .testimonial-cards {
+            display: flex;
+            gap: 32px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .testimonial-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            border-top: 4px solid #007cf0;
+            max-width: 350px;
+            min-width: 270px;
+            flex: 1 1 270px;
+            padding: 28px 28px 22px 28px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .testimonial-header {
+            margin-bottom: 8px;
+        }
+        .testimonial-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #222;
+        }
+        .testimonial-role {
+            font-size: 0.98rem;
+            color: #555;
+        }
+        .testimonial-verified {
+            color: #1bc47d;
+            font-size: 0.97rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+        .testimonial-content {
+            color: #222;
+            font-size: 1.04rem;
+            margin-top: 10px;
+            margin-bottom: 0;
+            line-height: 1.6;
+            position: relative;
+            padding-left: 8px;
+            padding-right: 8px;
+        }
+        .testimonial-content:before {
+            content: '\201C';
+            color: #007cf0;
+            font-size: 2.2rem;
+            position: absolute;
+            left: -8px;
+            top: -18px;
+            font-family: serif;
+        }
+        .testimonial-content:after {
+            content: '\201D';
+            color: #007cf0;
+            font-size: 2.2rem;
+            position: absolute;
+            right: -8px;
+            bottom: -18px;
+            font-family: serif;
+        }
+        .faq-section {
+            margin-top: 48px;
+            background: #e3f0ff;
+            border-radius: 14px;
+            padding: 32px 32px 18px 32px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .faq-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.22rem;
+            color: var(--main-blue);
+            font-weight: 700;
+            margin-bottom: 18px;
+            text-align: center;
+        }
+        .faq-item {
+            margin-bottom: 18px;
+        }
+        .faq-q {
+            font-weight: 600;
+            color: var(--main-purple);
+            margin-bottom: 4px;
+        }
+        .faq-a {
+            color: #555;
+            margin-left: 12px;
+        }
+        @media (max-width: 1100px) {
+            .container {
+                max-width: 99vw;
+                padding: 18px 2vw;
+            }
+            .testimonial-cards {
+                gap: 18px;
+            }
+        }
+        @media (max-width: 900px) {
+            .testimonial-cards {
+                flex-direction: column;
+                align-items: center;
+            }
+            .testimonial-card {
+                max-width: 98vw;
+            }
+        }
+        @media (max-width: 700px) {
+            .container {
+                padding: 12px 2vw;
+            }
+            h1 {
+                font-size: 1.3rem;
+            }
+            .faq-section {
+                padding: 18px 4px 8px 4px;
+            }
+        }
+    </style>
+    <script>
+        function showFileName(input) {
+            const fileNameSpan = document.getElementById('file-name');
+            if (input.files && input.files[0]) {
+                fileNameSpan.textContent = input.files[0].name;
+            } else {
+                fileNameSpan.textContent = '';
+            }
+        }
+    </script>
+</head>
+<body>
+    {% include 'navbar.html' %}
+    <div class="container">
+        <h1>Passive Job Search</h1>
+        <div class="desc">Receive job invitations on IT Job Search just by uploading your CV. Let employers find you!</div>
+        {% if upload_success %}
+        <div style="background:#eaffea;color:#007c21;border:1.5px solid #b2f2bb;padding:16px 24px;border-radius:10px;font-size:1.13rem;font-weight:600;text-align:center;margin-bottom:18px;">
+            <i class="fa-solid fa-circle-check"></i> Đã apply thành công!
+        </div>
+        {% endif %}
+        <div class="upload-section">
+            <label class="upload-label">Tải CV của bạn lên để nhận lời mời việc làm phù hợp</label>
+            <form class="upload-form" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <label class="custom-file-label" for="cv-upload">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> Chọn file CV (PDF, DOCX)
+                    <input id="cv-upload" type="file" name="cv" accept=".pdf,.doc,.docx" required onchange="showFileName(this)">
+                </label>
+                {% if company_name %}
+                    <input type="hidden" name="company" value="{{ company_name }}">
+                    <div style="margin:10px 0 0 0;font-weight:600;color:#1976d2;">Công ty bạn đang apply: {{ company_name }}</div>
+                {% else %}
+                    <select name="company" required style="padding:10px 18px;border-radius:8px;">
+                        <option value="">Chọn công ty muốn apply</option>
+                        {% for company in companies %}
+                            <option value="{{ company.name }}">{{ company.name }}</option>
+                        {% endfor %}
+                    </select>
+                {% endif %}
+                {% if job_title %}
+                    <input type="hidden" name="job_title" value="{{ job_title }}">
+                    <div style="margin:6px 0 0 0;font-weight:600;color:#1976d2;">Vị trí bạn đang apply: {{ job_title }}</div>
+                {% endif %}
+                {% if location %}
+                    <input type="hidden" name="location" value="{{ location }}">
+                    <div style="margin:6px 0 0 0;font-weight:600;color:#1976d2;">Khu vực: {{ location }}</div>
+                {% endif %}
+                <span class="file-name" id="file-name"></span>
+                <button class="upload-btn" type="submit"><i class="fa-solid fa-upload"></i> Tải CV lên ngay</button>
+            </form>
+            <div class="upload-guide">Chỉ cần tải CV lên, các công ty công nghệ sẽ chủ động liên hệ với bạn nếu phù hợp!</div>
+        </div>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <div class="step-title">Upload your CV</div>
+                    <div>Chọn file CV của bạn và nhấn "Tải CV lên ngay".</div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <div class="step-title">Chờ nhà tuyển dụng liên hệ</div>
+                    <div>Hệ thống sẽ tự động gửi CV của bạn đến các nhà tuyển dụng phù hợp.</div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <div class="step-title">Nhận lời mời phỏng vấn</div>
+                    <div>Bạn sẽ nhận được email hoặc thông báo khi có lời mời phỏng vấn.</div>
+                </div>
+            </div>
+        </div>
+        <div class="testimonials">
+            <div class="testimonials-title"><span class="highlight">Trải nghiệm</span> tìm việc thụ động từ các Chuyên gia IT</div>
+            <div class="testimonial-cards">
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="testimonial-name">Gia Kiệt</div>
+                        <div class="testimonial-role">Software Developer</div>
+                        <div class="testimonial-verified"><i class="fa-solid fa-circle-check"></i> Người dùng ITviec</div>
+                    </div>
+                    <div class="testimonial-content">
+                        Việc nhận được lời mời công việc từ chính nhà tuyển dụng khiến tôi cảm thấy tự tin hơn rất nhiều. Tôi cảm thấy kỹ năng và kinh nghiệm của mình vẫn được "săn đón" trên thị trường. Cả quá trình tìm việc trở nên tinh gọn và dễ chịu hơn vì tôi biết chắc chắn nhà tuyển dụng đã chủ động chọn tôi.
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="testimonial-name">Nam Nguyễn</div>
+                        <div class="testimonial-role">Senior Full Stack Developer</div>
+                        <div class="testimonial-verified"><i class="fa-solid fa-circle-check"></i> Người dùng ITviec</div>
+                    </div>
+                    <div class="testimonial-content">
+                        Chức năng lời mời công việc đã giúp tôi có một công việc mới chỉ trong vòng 8 ngày sau khi tải CV lên mà không cần chủ động tìm việc. Nhà tuyển dụng liên hệ trực tiếp với tôi và chỉ thấy toàn bộ CV sau khi tôi chấp nhận. Điều này giúp tôi tiết kiệm thời gian và lời mời hoàn toàn phù hợp với kỹ năng của tôi.
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="testimonial-name">Hoàng Trường</div>
+                        <div class="testimonial-role">Senior Product Owner</div>
+                        <div class="testimonial-verified"><i class="fa-solid fa-circle-check"></i> Người dùng ITviec</div>
+                    </div>
+                    <div class="testimonial-content">
+                        Nhận lời mời công việc giúp tôi không cần dành nhiều thời gian tìm kiếm hay sàng lọc công việc, mà vẫn có cơ hội phù hợp với kỹ năng và mong muốn. Tôi có thể dùng thời gian đã tiết kiệm được để tập trung nâng cao kỹ năng và chuẩn bị sẵn sàng cho cơ hội việc làm mới.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="faq-section">
+            <div class="faq-title"><i class="fa-solid fa-circle-question"></i> Câu hỏi thường gặp (FAQ)</div>
+            <div class="faq-item">
+                <div class="faq-q">Tôi có thể upload những định dạng file nào?</div>
+                <div class="faq-a">Bạn có thể upload file PDF, DOC, hoặc DOCX.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q">CV của tôi sẽ được gửi đến đâu?</div>
+                <div class="faq-a">CV của bạn sẽ được gửi đến các nhà tuyển dụng phù hợp với kỹ năng và kinh nghiệm của bạn.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q">Tôi có thể chỉnh sửa hoặc thay thế CV sau khi đã upload không?</div>
+                <div class="faq-a">Bạn có thể upload lại CV mới bất cứ lúc nào để cập nhật thông tin.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q">Tôi có mất phí khi sử dụng tính năng này không?</div>
+                <div class="faq-a">Hoàn toàn miễn phí cho ứng viên.</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

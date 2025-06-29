@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ blog.title }} - Blog IT</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
+    <style>
+        body { margin: 0; padding: 0; font-family: 'Roboto', Arial, sans-serif; background: #f6f8fa; color: #222; }
+        .blog-detail-wrap { max-width: 1200px; margin: 0 auto; padding: 38px 0 32px 0; display: flex; gap: 32px; }
+        .blog-detail-main { flex: 2; background: #fff; border-radius: 14px; box-shadow: 0 2px 12px #e3eaf3; padding: 32px 32px 32px 32px; }
+        .blog-detail-title { font-family: 'Montserrat', sans-serif; font-size: 2.1rem; font-weight: 700; color: #e60023; margin-bottom: 12px; }
+        .blog-detail-meta { color: #888; font-size: 0.98rem; margin-bottom: 10px; font-style: italic; }
+        .blog-detail-tags { margin-bottom: 16px; }
+        .blog-detail-tag { display: inline-block; background: #f0f4fa; color: #007cf0; border-radius: 12px; padding: 3px 12px; font-size: 0.92rem; margin-right: 6px; margin-bottom: 4px; }
+        .blog-detail-img { width: 100%; max-height: 340px; object-fit: cover; border-radius: 16px; background: #e3eaf3; margin-bottom: 18px; }
+        .blog-detail-content { font-size: 1.08rem; line-height: 1.7; margin-top: 18px; }
+        .blog-back { display: inline-block; margin: 0 0 18px 0; color: #007cf0; text-decoration: none; font-weight: 600; font-size: 1rem; }
+        .blog-back:hover { text-decoration: underline; }
+        .blog-toc { background: #fafbfc; border: 1.5px solid #e3eaf3; border-radius: 8px; padding: 14px 18px; margin-bottom: 18px; font-size: 1rem; }
+        .blog-toc-title { font-weight: 700; margin-bottom: 6px; }
+        .blog-toc ol { margin: 0; padding-left: 18px; }
+        .blog-toc li { margin-bottom: 2px; }
+        .blog-detail-content p { margin-bottom: 1.1em; }
+        .blog-sidebar { flex: 1; display: flex; flex-direction: column; gap: 24px; }
+        .related-box { background: #fff; border-radius: 14px; box-shadow: 0 2px 12px #e3eaf3; padding: 18px 18px 10px 18px; }
+        .related-title { font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; }
+        .related-list { list-style: none; padding: 0; margin: 0; }
+        .related-item { border-bottom: 1px solid #eee; padding: 10px 0; }
+        .related-item:last-child { border-bottom: none; }
+        .related-link { color: #222; text-decoration: none; font-weight: 500; transition: color 0.2s; }
+        .related-link:hover { color: #e60023; }
+        .email-box { background: #18191a; color: #fff; border-radius: 14px; padding: 22px 18px; text-align: center; }
+        .email-title { font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; }
+        .email-input { width: 90%; max-width: 260px; padding: 8px 12px; border-radius: 6px; border: none; margin-bottom: 10px; font-size: 1rem; }
+        .email-btn { background: #e60023; color: #fff; border: none; border-radius: 6px; padding: 8px 22px; font-size: 1rem; font-family: 'Montserrat', sans-serif; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        .email-btn:hover { background: #b8001a; }
+        @media (max-width: 1000px) { .blog-detail-wrap { flex-direction: column; gap: 18px; padding: 18px 0; } .blog-sidebar { flex-direction: row; gap: 18px; } }
+        @media (max-width: 700px) { .blog-detail-wrap { flex-direction: column; gap: 8px; padding: 8px 0; } .blog-detail-main { padding: 12px 2vw; } .blog-detail-title { font-size: 1.2rem; } .blog-sidebar { flex-direction: column; gap: 12px; } }
+    </style>
+</head>
+<body>
+    {% include 'navbar.html' %}
+    <div class="blog-detail-wrap">
+        <div class="blog-detail-main">
+            <a href="/blog/" class="blog-back">&larr; Quay lại danh sách blog</a>
+            <div class="blog-detail-meta">Ngày xuất bản: {{ blog.created_at|date:"d/m/Y" }}</div>
+            <div class="blog-detail-title">{{ blog.title }}</div>
+            <div class="blog-detail-tags">
+                {% for tag in blog.tag_list %}
+                <span class="blog-detail-tag">{{ tag }}</span>
+                {% endfor %}
+            </div>
+            {% if blog.image %}
+            <img class="blog-detail-img" src="{{ blog.image.url }}" alt="{{ blog.title }}">
+            {% endif %}
+            {# Mục lục demo nếu muốn, có thể bỏ qua nếu không có #}
+            {% if blog.content|length > 300 %}
+            <div class="blog-toc">
+                <div class="blog-toc-title">Nội dung bài viết</div>
+                <ol>
+                    <li>Đôi nét về chúng mình</li>
+                    <li>Omnia Systems – Nơi công việc không "ngốn" hết cuộc sống</li>
+                    <li>Work Hard, Play Harder – Gắn kết không chỉ tại nơi làm việc</li>
+                    <li>Work-life balance ở Omnia: Bạn thấy sao?</li>
+                </ol>
+            </div>
+            {% endif %}
+            <div class="blog-detail-content">{{ blog.content|safe }}</div>
+        </div>
+        <div class="blog-sidebar">
+            <div class="related-box">
+                <div class="related-title">Related Articles</div>
+                <ul class="related-list">
+                    {% for b in related %}
+                    <li class="related-item"><a class="related-link" href="/blog/{{ b.slug }}/">{{ b.title }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="email-box">
+                <div class="email-title">KevinIT Blog – Ý Tưởng Phát Triển Sự Nghiệp IT Của Bạn</div>
+                <input class="email-input" type="email" placeholder="Nhập email của bạn">
+                <br>
+                <button class="email-btn">Đăng ký nhận tin</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Job Search</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
+    <link rel="icon" href="https://img.icons8.com/color/48/000000/job.png">
+    <style>
+        :root {
+            --main-red: #007cf0;
+            --main-black: #18191a;
+            --main-gray: #f6f8fa;
+            --main-white: #fff;
+            --main-gradient: linear-gradient(90deg, #18191a 60%, #999714 100%);
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', Arial, sans-serif;
+            background: linear-gradient(90deg, #1976d2 0%, #ff4d4f 100%);
+            color: #222;
+            min-height: 100vh;
+        }
+        .header {
+            background: rgba(255,255,255,0.96) !important;
+            border-radius: 24px;
+            margin: 24px auto 0 auto;
+            box-shadow: 0 4px 32px #0001;
+            max-width: 1200px;
+            padding-left: 0;
+            padding-right: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+            box-shadow: none;
+        }
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 18px 24px 0 24px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .logo-img {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .logo-img span {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.7rem;
+            color: var(--main-red);
+        }
+        .logo-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: #fff;
+        }
+        .menu {
+            display: flex;
+            gap: 28px;
+        }
+        .menu a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: color 0.2s;
+        }
+        .menu a:hover {
+            color: #ffb3b3;
+        }
+        .search-section {
+            max-width: 700px;
+            margin: 36px auto 0 auto;
+            padding: 0 24px;
+        }
+        .search-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 18px;
+            color: #fff;
+            text-align: center;
+        }
+        .search-bar {
+            display: flex;
+            gap: 12px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            padding: 12px 16px;
+            align-items: center;
+        }
+        .search-bar select, .search-bar input {
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            padding: 8px 10px;
+            border-radius: 6px;
+            background: #f6f8fa;
+            font-family: 'Roboto', sans-serif;
+        }
+        .search-bar select {
+            min-width: 120px;
+        }
+        .search-bar input {
+            flex: 1;
+        }
+        .search-btn {
+            background: linear-gradient(90deg, #1976d2, #ff4d4f);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 28px;
+            font-weight: 800;
+            font-size: 1.08rem;
+            cursor: pointer;
+            box-shadow: 0 2px 8px #1976d24a;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s;
+            letter-spacing: 0.5px;
+        }
+        .search-btn:hover {
+            background: linear-gradient(90deg, #ff4d4f, #1976d2);
+            color: #fff;
+            box-shadow: 0 4px 16px #ff4d4f33;
+            transform: translateY(-2px) scale(1.04);
+        }
+        .trending {
+            margin: 12px 0 0 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            align-items: center;
+        }
+        .trend-tag {
+            background: #23272b;
+            color: #fff;
+            border-radius: 16px;
+            padding: 6px 18px;
+            font-size: 0.98rem;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            letter-spacing: 0.01em;
+            transition: background 0.2s, color 0.2s;
+            cursor: pointer;
+        }
+        .trend-tag:hover {
+            background: var(--main-red);
+            color: #fff;
+        }
+        .services {
+            max-width: 1100px;
+            margin: 36px auto 0 auto;
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .service-card {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            padding: 28px 32px 22px 32px;
+            min-width: 260px;
+            max-width: 320px;
+            flex: 1 1 260px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            position: relative;
+        }
+        .service-card .badge {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            background: var(--main-red);
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border-radius: 6px;
+            padding: 2px 10px;
+        }
+        .service-card .badge.new {
+            background: #1bc47d;
+        }
+        .service-card .icon {
+            font-size: 2.2rem;
+            margin-bottom: 12px;
+        }
+        .service-card-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .service-card-desc {
+            font-size: 1rem;
+            color: #444;
+            margin-bottom: 18px;
+        }
+        .service-card-btn {
+            background: #fff;
+            color: var(--main-red);
+            border: 2px solid var(--main-red);
+            border-radius: 6px;
+            padding: 7px 18px;
+            font-size: 1rem;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .service-card-btn:hover {
+            background: var(--main-red);
+            color: #fff;
+        }
+        @media (max-width: 900px) {
+            .services {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        @media (max-width: 700px) {
+            .nav, .search-section, .trending, .services {
+                padding-left: 8px;
+                padding-right: 8px;
+            }
+            .search-title {
+                font-size: 1.2rem;
+            }
+            .service-card {
+                min-width: 90vw;
+                max-width: 98vw;
+            }
+        }
+        @media (max-width: 900px) {
+            .header, .stats-section, .top-companies-section, .why-kevin-section, .blog-section, .feedback-section {
+                border-radius: 0;
+                margin: 0;
+                max-width: 100vw;
+            }
+        }
+        .hero-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 48px 5vw 24px 5vw;
+            background: none;
+            border-radius: 0 0 36px 36px;
+            box-shadow: 0 8px 32px #1976d24a;
+            gap: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, #fff8, #fff4 60%, transparent 100%);
+            pointer-events: none;
+        }
+        .hero-content {
+            flex: 1;
+            min-width: 320px;
+            color: #fff;
+            z-index: 1;
+        }
+        .hero-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+            color: #fff;
+            line-height: 1.2;
+            text-shadow: 0 2px 8px #0002;
+        }
+        .hero-highlight {
+            color: #ffeb3b;
+            background: #fff3;
+            border-radius: 8px;
+            padding: 0 8px;
+        }
+        .kevin-signature {
+            color: #fff;
+            font-family: 'Pacifico', cursive;
+            text-shadow: 0 2px 8px #0002;
+        }
+        .hero-desc {
+            font-size: 1.2rem;
+            margin-bottom: 24px;
+            color: #f3f3f3;
+            text-shadow: 0 1px 4px #0002;
+        }
+        .hero-cta {
+            display: inline-block;
+            background: linear-gradient(90deg, #fff, #ffb3b3);
+            color: #1976d2;
+            font-weight: 700;
+            padding: 12px 32px;
+            border-radius: 32px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 16px #1976d22a;
+            transition: background 0.2s, color 0.2s, transform 0.2s;
+        }
+        .hero-cta:hover {
+            background: linear-gradient(90deg, #ff4d4f, #1976d2);
+            color: #fff;
+            transform: translateY(-2px) scale(1.04);
+        }
+        .hero-illustration img {
+            width: 340px;
+            max-width: 40vw;
+            border-radius: 24px;
+            box-shadow: 0 8px 32px #1976d22a;
+            background: #fff8;
+            z-index: 1;
+        }
+        @media (max-width: 900px) {
+            .hero-section { flex-direction: column; text-align: center; }
+            .hero-illustration img { max-width: 80vw; }
+        }
+        .search-section {
+            margin: 0 auto;
+            padding: 24px 0 0 0;
+            max-width: 700px;
+            text-align: center;
+        }
+        .search-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        .search-bar {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+        .search-bar input, .search-bar select {
+            padding: 10px 14px;
+            border: 1px solid #d0d7e2;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            min-width: 120px;
+        }
+        .search-bar input:focus, .search-bar select:focus {
+            border-color: #1976d2;
+        }
+        .search-btn {
+            background: linear-gradient(90deg, #1976d2, #ff4d4f);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 24px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .search-btn:hover {
+            background: linear-gradient(90deg, #ff4d4f, #1976d2);
+        }
+        .trending {
+            margin: 12px 0 0 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+        .trend-tag {
+            background: #e3f2fd;
+            color: #1976d2;
+            border-radius: 16px;
+            padding: 6px 18px;
+            font-size: 0.98rem;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.2s, color 0.2s;
+        }
+        .trend-tag:hover {
+            background: #1976d2;
+            color: #fff;
+        }
+        .stats-section {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin: 36px 0 0 0;
+            padding: 0 5vw;
+        }
+        .stat-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 2px 12px #1976d22a;
+            padding: 24px 32px;
+            text-align: center;
+            min-width: 120px;
+            transition: transform 0.2s;
+        }
+        .stat-card:hover {
+            transform: translateY(-4px) scale(1.04);
+        }
+        .stat-num {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #ff4d4f;
+            margin-bottom: 6px;
+            transition: color 0.2s;
+        }
+        .stat-label {
+            color: #1976d2;
+            font-weight: 600;
+            font-size: 1.05rem;
+        }
+        @media (max-width: 700px) {
+            .stats-section { flex-direction: column; gap: 16px; align-items: center; }
+        }
+        .top-companies-section {
+            margin: 56px 0 0 0;
+            padding: 0 5vw;
+        }
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1a237e;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        .top-companies-carousel {
+            display: flex;
+            gap: 32px;
+            overflow-x: auto;
+            padding-bottom: 12px;
+            justify-content: center;
+        }
+        .company-logo-card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px #1976d22a;
+            padding: 18px 20px 10px 20px;
+            text-align: center;
+            min-width: 120px;
+            transition: box-shadow 0.2s, transform 0.2s;
+            cursor: pointer;
+            text-decoration: none !important;
+        }
+        .company-logo-card img {
+            width: 60px; height: 60px; object-fit: contain; margin-bottom: 8px;
+        }
+        .company-logo-card:hover {
+            box-shadow: 0 6px 24px #1976d24a;
+            transform: translateY(-4px) scale(1.06);
+        }
+        .company-logo-card div {
+            text-align: center;
+            font-weight: 700;
+            color: #1a237e;
+            font-size: 1.08rem;
+            margin-top: 4px;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .company-logo-card:hover div {
+            color: #ff4d4f;
+        }
+        .why-kevin-section {
+            margin: 56px 0 0 0;
+            padding: 0 5vw;
+        }
+        .why-kevin-list {
+            display: flex;
+            gap: 32px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .why-kevin-item {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px #1976d22a;
+            padding: 24px 32px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #222;
+            min-width: 220px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .why-icon {
+            font-size: 1.6rem;
+        }
+        @media (max-width: 900px) {
+            .why-kevin-list { flex-direction: column; gap: 16px; align-items: center; }
+        }
+        .blog-section {
+            background: linear-gradient(90deg, #5a7bd7 0%, #d94f6a 100%);
+            padding: 48px 0 60px 0;
+        }
+        .blog-section .section-title {
+            color: #2d2d7b;
+            font-size: 2.2rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 36px;
+            letter-spacing: 0.01em;
+        }
+        .blog-list {
+            display: flex;
+            gap: 32px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .blog-card {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 4px 24px #1976d22a;
+            border: 2px solid #e3e8f0;
+            width: 300px;
+            padding: 0 0 18px 0;
+            transition: box-shadow 0.25s, border 0.25s, transform 0.18s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 18px;
+            text-decoration: none !important;
+        }
+        .blog-card:hover {
+            box-shadow: 0 8px 32px #d94f6a33;
+            border: 2.5px solid #d94f6a;
+            transform: translateY(-6px) scale(1.03);
+        }
+        .blog-card img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 20px 20px 0 0;
+        }
+        .blog-title {
+            font-size: 1.18rem;
+            font-weight: 700;
+            color: #1976d2;
+            margin: 18px 0 6px 0;
+            text-align: center;
+            text-decoration: none !important;
+            transition: color 0.2s;
+        }
+        .blog-card:hover .blog-title {
+            color: #d94f6a;
+        }
+        .blog-desc {
+            color: #444;
+            font-size: 1.01rem;
+            text-align: center;
+            margin-bottom: 10px;
+            min-height: 48px;
+        }
+        .blog-link {
+            color: #ff3c3c;
+            font-weight: 700;
+            text-align: center;
+            margin-top: 2px;
+            text-decoration: none !important;
+            display: inline-block;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+        .blog-card:hover .blog-link {
+            color: #1976d2;
+            text-decoration: underline;
+        }
+        .feedback-section {
+            margin: 56px 0 0 0;
+            padding: 0 5vw;
+        }
+        .feedback-list {
+            display: flex;
+            gap: 32px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .feedback-card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px #1976d22a;
+            padding: 24px 24px 16px 24px;
+            min-width: 220px;
+            max-width: 320px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+        .feedback-avatar img {
+            width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid #1976d2;
+        }
+        .feedback-content {
+            font-size: 1.05rem;
+            color: #222;
+        }
+        .feedback-name {
+            display: block;
+            color: #1976d2;
+            font-weight: 600;
+            margin-top: 6px;
+        }
+        .feedback-card:hover {
+            box-shadow: 0 6px 24px #1976d24a;
+            transform: translateY(-4px) scale(1.04);
+        }
+        .footer {
+            background: linear-gradient(90deg, #1976d2 60%, #ff4d4f 100%);
+            color: #fff;
+            padding: 36px 0 0 0;
+            margin-top: 56px;
+        }
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 5vw;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+        .footer-logo {
+            font-size: 1.6rem;
+            font-family: 'Pacifico', cursive;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+        .footer-links a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 12px;
+            font-weight: 500;
+            transition: text-decoration 0.2s;
+        }
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        .footer-social a {
+            color: #fff;
+            font-size: 1.3rem;
+            margin: 0 8px;
+            transition: color 0.2s;
+        }
+        .footer-social a:hover {
+            color: #ffb3b3;
+        }
+        .footer-copyright {
+            text-align: center;
+            color: #fff;
+            font-size: 0.98rem;
+            margin: 18px 0 0 0;
+            padding-bottom: 18px;
+            opacity: 0.8;
+        }
+        @media (max-width: 900px) {
+            .footer-content { flex-direction: column; gap: 12px; align-items: flex-start; }
+        }
+        /* Animated stats */
+        @keyframes countUp {
+            from { color: #1976d2; }
+            to { color: #ff4d4f; }
+        }
+        .header .hero-title {
+            color: #1a237e;
+            font-weight: 900;
+            text-shadow: none;
+        }
+        .header .hero-highlight {
+            color: #ff4d4f;
+            background: #fff0f0;
+            font-weight: 900;
+        }
+        .header .kevin-signature {
+            color: #1976d2;
+            text-shadow: none;
+        }
+        .header .hero-desc {
+            color: #333;
+            font-weight: 500;
+            text-shadow: none;
+        }
+        .header .hero-cta {
+            background: linear-gradient(90deg, #1976d2, #ff4d4f);
+            color: #fff;
+            font-weight: 700;
+            box-shadow: 0 4px 16px #1976d22a;
+        }
+        .header .hero-cta:hover {
+            background: linear-gradient(90deg, #ff4d4f, #1976d2);
+            color: #fff;
+        }
+        .search-bar input, .search-bar select {
+            color: #1a237e;
+            font-weight: 600;
+            background: #fff;
+            border: 1.5px solid #b0bec5;
+        }
+        .search-bar input::placeholder {
+            color: #888;
+            opacity: 1;
+            font-weight: 500;
+        }
+        .search-title {
+            color: #1a237e;
+            font-weight: 800;
+        }
+        .company-logo-fallback {
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1976d2 60%, #ff4d4f 100%);
+            color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; font-weight: 700;
+            margin: 0 auto 8px auto;
+            box-shadow: 0 2px 8px #1976d24a;
+        }
+    </style>
+</head>
+<body>
+    {% include 'navbar.html' %}
+    <div class="header">
+        <div class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">Khám phá <span class="hero-highlight">nghìn+ việc IT</span> chất lượng tại <span class="kevin-signature">Kevin IT</span></h1>
+                <p class="hero-desc">Nơi kết nối ứng viên IT tài năng với các công ty công nghệ hàng đầu Việt Nam.</p>
+                <a href="#search-section" class="hero-cta">Tìm việc ngay</a>
+            </div>
+            <div class="hero-illustration">
+                <img src="https://cdni.iconscout.com/illustration/premium/thumb/job-search-4482132-3723276.png" alt="IT Job Search"/>
+            </div>
+        </div>
+        <div id="search-section" class="search-section">
+            <div class="search-title">999+ IT Jobs For <span style="color:#ffb3b3">"Gút"</span> Developers</div>
+            <form class="search-bar" method="get" action="{% url 'job_list' %}" autocomplete="off">
+                <select name="city">
+                    <option value="">All Cities</option>
+                    <option value="Hà Nội">Hà Nội</option>
+                    <option value="Hồ Chí Minh">Hồ Chí Minh</option>
+                    <option value="Đà Nẵng">Đà Nẵng</option>
+                </select>
+                <input type="text" name="q" placeholder="Enter keyword skill (Java, iOS...), job title, company..." value="{{ q|default:'' }}">
+                <button class="search-btn" type="submit">Search</button>
+            </form>
+        </div>
+        <div class="trending">
+            <a href="{% url 'job_list_by_language' 'java' %}" class="trend-tag">Java</a>
+            <a href="{% url 'job_list_by_language' 'csharp' %}" class="trend-tag">C#</a>
+            <a href="{% url 'job_list_by_language' 'javascript' %}" class="trend-tag">JavaScript</a>
+            <a href="{% url 'job_list' %}?q=Tester" class="trend-tag">Tester</a>
+            <a href="{% url 'job_list_by_language' 'php' %}" class="trend-tag">PHP</a>
+            <a href="{% url 'job_list_by_language' 'kotlin' %}" class="trend-tag">Kotlin</a>
+            <a href="{% url 'job_list_by_language' 'go' %}" class="trend-tag">Go</a>
+            <a href="{% url 'job_list_by_language' 'ruby' %}" class="trend-tag">Ruby</a>
+        </div>
+    </div>
+    <div class="stats-section">
+        <div class="stat-card"><div class="stat-num" id="stat-jobs">0</div><div class="stat-label">Việc làm IT</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-companies">0</div><div class="stat-label">Công ty IT</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-candidates">0</div><div class="stat-label">Ứng viên</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-success">0</div><div class="stat-label">Tuyển dụng thành công</div></div>
+    </div>
+    <div class="top-companies-section">
+        <h2 class="section-title">Top Công ty IT nổi bật</h2>
+        <div class="top-companies-carousel">
+            {% for company in top_companies %}
+            <a href="{% url 'job_list_by_company' company.slug %}" class="company-logo-card" title="{{ company.name }}">
+                {% if company.logo %}
+                    <img src="{{ company.logo.url }}" alt="{{ company.name }}">
+                {% else %}
+                    <div class="company-logo-fallback">{{ company.name|slice:":2"|upper }}</div>
+                {% endif %}
+                <div>{{ company.name }}</div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="why-kevin-section">
+        <h2 class="section-title">Tại sao chọn <span class="kevin-signature">Kevin IT</span>?</h2>
+        <div class="why-kevin-list">
+            <div class="why-kevin-item"><span class="why-icon">🚀</span> Kết nối nhanh với hàng nghìn việc IT chất lượng</div>
+            <div class="why-kevin-item"><span class="why-icon">🤝</span> Đối tác tuyển dụng uy tín, đa dạng lĩnh vực</div>
+            <div class="why-kevin-item"><span class="why-icon">💡</span> Giao diện hiện đại, trải nghiệm mượt mà</div>
+            <div class="why-kevin-item"><span class="why-icon">🔒</span> Bảo mật thông tin ứng viên tuyệt đối</div>
+            <div class="why-kevin-item"><span class="why-icon">⏰</span> Hỗ trợ ứng viên 24/7</div>
+            <div class="why-kevin-item"><span class="why-icon">👨‍💻</span> Cộng đồng IT năng động</div>
+        </div>
+    </div>
+    <div class="blog-section">
+        <h2 class="section-title">Blog IT mới nhất</h2>
+        <div class="blog-list">
+            {% for blog in latest_blogs %}
+            <a href="{% url 'blog_detail' blog.slug %}" class="blog-card">
+                {% if blog.image %}
+                    <img src="{{ blog.image.url }}" alt="{{ blog.title }}">
+                {% else %}
+                    <img src="/media/blog_images/blog1.jpg" alt="Blog mặc định">
+                {% endif %}
+                <div class="blog-title">{{ blog.title }}</div>
+                <div class="blog-desc">{{ blog.summary|truncatechars:120 }}</div>
+                <div class="blog-link">Đọc tiếp</div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="feedback-section">
+        <h2 class="section-title">Ứng viên nói gì về Kevin IT?</h2>
+        <div class="feedback-list">
+            <div class="feedback-card">
+                <div class="feedback-avatar"><img src="https://randomuser.me/api/portraits/men/32.jpg" alt="A"></div>
+                <div class="feedback-content">"Tìm việc trên Kevin IT rất nhanh, nhiều lựa chọn phù hợp với chuyên môn của tôi."<br><span class="feedback-name">Nguyễn Văn A</span></div>
+            </div>
+            <div class="feedback-card">
+                <div class="feedback-avatar"><img src="https://randomuser.me/api/portraits/women/44.jpg" alt="B"></div>
+                <div class="feedback-content">"Giao diện đẹp, dễ dùng, nhiều công ty lớn đăng tuyển."<br><span class="feedback-name">Trần Thị B</span></div>
+            </div>
+            <div class="feedback-card">
+                <div class="feedback-avatar"><img src="https://randomuser.me/api/portraits/men/65.jpg" alt="C"></div>
+                <div class="feedback-content">"Tôi đã nhận được offer chỉ sau 3 ngày ứng tuyển!"<br><span class="feedback-name">Lê Văn C</span></div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">Kevin IT</div>
+            <div class="footer-links">
+                <a href="/">Trang chủ</a>
+                <a href="/companies/">Top Công ty</a>
+                <a href="/blog/">Blog</a>
+                <a href="/login/">Đăng nhập</a>
+            </div>
+            <div class="footer-social">
+                <a href="https://www.facebook.com/giakiet1803/"><i class="fa-brands fa-facebook"></i></a>
+                <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="https://github.com/giekiwt"><i class="fa-brands fa-github"></i></a>
+            </div>
+        </div>
+        <div class="footer-copyright">© 2025 Kevin IT. All rights reserved.</div>
+    </footer>
+    <script>
+    // Animated stats
+    function animateStat(id, end, duration) {
+        let el = document.getElementById(id);
+        let start = 0;
+        let range = end - start;
+        let stepTime = Math.abs(Math.floor(duration / range));
+        let current = start;
+        let timer = setInterval(function() {
+            current += 1;
+            el.textContent = current.toLocaleString();
+            if (current >= end) {
+                clearInterval(timer);
+                el.textContent = end.toLocaleString();
+            }
+        }, stepTime);
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        animateStat('stat-jobs', 1200, 1200);
+        animateStat('stat-companies', 180, 1000);
+        animateStat('stat-candidates', 3500, 1400);
+        animateStat('stat-success', 800, 1100);
+    });
+    </script>
+</body>
+</html> 

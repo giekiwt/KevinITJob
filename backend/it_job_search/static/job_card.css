@@ -7,15 +7,14 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: space-between;
     background: transparent;
     border: 2px solid #d32f2f;
     border-radius: 16px;
     box-shadow: 0 4px 24px rgba(25,118,210,0.08);
-    padding: 0;
-    transition: box-shadow 0.2s, border 0.2s, transform 0.2s;
-    text-decoration: none;
-    color: inherit;
+    padding: 0 32px;
     min-height: 180px;
+    position: relative;
 }
 .job-card:hover { box-shadow: 0 8px 32px #1976d233; border: 2px solid #b71c1c; transform: translateY(-2px) scale(1.01); }
 .job-card-left {
@@ -41,10 +40,29 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    height: 100%;
     min-width: 180px;
+    align-self: center;
+    margin: 0;
+    padding: 0;
 }
-.apply-btn { display: flex; align-items: center; justify-content: center; background: #d32f2f; color: #fff; font-weight: 600; font-size: 1rem; padding: 12px 32px; border-radius: 8px; text-decoration: none; text-align: center; transition: background 0.2s, box-shadow 0.2s; box-shadow: 0 2px 8px #d32f2f22; border: none; min-height: 44px; margin-right: 40px; }
+.apply-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #d32f2f;
+    color: #fff;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 12px 32px;
+    border-radius: 8px;
+    text-decoration: none;
+    text-align: center;
+    transition: background 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px #d32f2f22;
+    border: none;
+    min-height: 44px;
+    margin: 0;
+}
 .apply-btn:hover { background: #b71c1c; box-shadow: 0 4px 16px #d32f2f33; }
 .no-job { text-align: center; color: #888; font-size: 1.1rem; padding: 40px 0; }
 .job-pagination { display: flex; justify-content: center; gap: 8px; margin-top: 32px; }
