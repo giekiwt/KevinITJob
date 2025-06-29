@@ -13,6 +13,7 @@
     <div class="job-listing-grid">
         {% for job in jobs %}
         <div class="job-card job-card-link">
+            <a href="{% url 'job_detail' job.id %}" class="job-card-full-link"></a>
             <div class="job-card-left">
                 <div class="job-card-header">
                     {% if job.company.logo %}
@@ -42,7 +43,7 @@
             <div class="apply-btn-wrap"><a href="/job-invitation/?company={{ job.company.slug }}&job_title={{ job.title|urlencode }}&location={{ job.location.name|urlencode }}" class="apply-btn">Apply Now</a></div>
         </div>
         {% empty %}
-        <div class="no-job">Không có việc làm nào tại khu vực này.</div>
+        <div class="no-job">Công việc hiện chưa có, vui lòng đợi cập nhật...</div>
         {% endfor %}
     </div>
     {% if jobs.has_other_pages %}

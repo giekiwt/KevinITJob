@@ -13,8 +13,8 @@
     
     <!-- Search and Filter Bar -->
     <div class="job-filter-bar">
-        <form method="get" style="display: flex; gap: 16px; flex-wrap: wrap; align-items: center; width: 100%;">
-            <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Tìm kiếm việc làm..." style="padding: 8px 12px; border-radius: 6px; border: 1.5px solid #eee; font-size: 1rem; min-width: 200px;">
+        <form method="get" class="job-filter-form">
+            <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Tìm kiếm việc làm, kỹ năng, công ty..." class="job-filter-input">
             <select name="location" class="job-filter-select">
                 <option value="">Tất cả địa điểm</option>
                 {% for location in locations %}
@@ -29,7 +29,7 @@
             </select>
             <button type="submit" class="job-filter-btn">Tìm kiếm</button>
             {% if request.GET.q or request.GET.location or request.GET.language %}
-            <a href="{% url 'job_list' %}" style="color: #888; text-decoration: none; font-size: 0.9rem;">Xóa bộ lọc</a>
+            <a href="{% url 'job_list' %}" class="job-filter-clear">Xóa bộ lọc</a>
             {% endif %}
         </form>
     </div>

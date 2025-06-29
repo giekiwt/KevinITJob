@@ -28,9 +28,13 @@ def job_list(request):
             Q(skills__name__icontains=q)
         ).distinct()
     # Filter theo ngôn ngữ
-    language_id = request.GET.get('language')
-    if language_id:
-        jobs = jobs.filter(skills__id=language_id)
+    language_slug = request.GET.get('language')
+    if language_slug:
+        try:
+            language_obj = ProgrammingLanguage.objects.get(slug=language_slug)
+            jobs = jobs.filter(skills=language_obj)
+        except ProgrammingLanguage.DoesNotExist:
+            jobs = jobs.none()
     # Filter theo công ty
     company_id = request.GET.get('company')
     if company_id:
@@ -49,7 +53,7 @@ def job_list(request):
         'languages': get_languages(),
         'companies': Company.objects.all(),
         'locations': Location.objects.all(),
-        'selected_language': language_id,
+        'selected_language': language_slug,
         'selected_company': company_id,
         'selected_location': location_id,
         'q': q,

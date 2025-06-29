@@ -14,6 +14,7 @@
         {% for job in page_obj %}
             {% if job and job.company and job.title %}
             <div class="job-card job-card-link">
+                <a href="{% url 'job_detail' job.id %}" class="job-card-full-link"></a>
                 <div class="job-card-main">
                     <div class="job-card-info-block">
                         {% if job.company.logo %}
