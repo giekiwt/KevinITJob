@@ -12,7 +12,8 @@
     <div class="job-listing-title">{{ jobs|length }} việc làm tại <span class="highlight">{{ location }}</span> - Việt Nam</div>
     <div class="job-listing-grid">
         {% for job in jobs %}
-        <a href="{% url 'job_detail' job.id %}" class="job-card job-card-link">
+        <div class="job-card job-card-link">
+            <a href="{% url 'job_detail' job.id %}" class="job-card-full-link"></a>
             <div class="job-card-left">
                 <div class="job-card-header">
                     {% if job.company.logo %}
@@ -36,7 +37,7 @@
                 </div>
             </div>
             <div class="apply-btn-wrap"><div class="apply-btn">Apply Now</div></div>
-        </a>
+        </div>
         {% empty %}
         <div class="no-job">Không có việc làm nào tại khu vực này.</div>
         {% endfor %}
