@@ -12,7 +12,7 @@
     <div class="job-listing-title">{{ jobs|length }} việc làm tại <span class="highlight">{{ location }}</span> - Việt Nam</div>
     <div class="job-listing-grid">
         {% for job in jobs %}
-        <a href="{% url 'job_detail' job.id %}" class="job-card job-card-link">
+        <div class="job-card job-card-link">
             <div class="job-card-left">
                 <div class="job-card-header">
                     {% if job.company.logo %}
@@ -29,14 +29,18 @@
                         </div>
                         <div class="job-card-skills">
                             {% for skill in job.skills.all %}
-                                <span class="skill-tag">{{ skill.name }}</span>
+                                {% if skill.slug %}
+                                    <a href="{% url 'job_list_by_language' skill.slug %}" class="skill-tag">{{ skill.name }}</a>
+                                {% else %}
+                                    <span class="skill-tag">{{ skill.name }}</span>
+                                {% endif %}
                             {% endfor %}
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="apply-btn-wrap"><div class="apply-btn">Apply Now</div></div>
-        </a>
+            <div class="apply-btn-wrap"><a href="/job-invitation/?company={{ job.company.slug }}&job_title={{ job.title|urlencode }}&location={{ job.location.name|urlencode }}" class="apply-btn">Apply Now</a></div>
+        </div>
         {% empty %}
         <div class="no-job">Không có việc làm nào tại khu vực này.</div>
         {% endfor %}

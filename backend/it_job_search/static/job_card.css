@@ -55,7 +55,7 @@
     font-size: 1rem;
     padding: 12px 32px;
     border-radius: 8px;
-    text-decoration: none;
+    text-decoration: none !important;
     text-align: center;
     transition: background 0.2s, box-shadow 0.2s;
     box-shadow: 0 2px 8px #d32f2f22;
@@ -63,7 +63,32 @@
     min-height: 44px;
     margin: 0;
 }
+.apply-btn, .apply-btn a {
+    text-decoration: none !important;
+    color: #fff !important;
+}
+.apply-btn a:visited, .apply-btn a:active, .apply-btn a:hover {
+    text-decoration: none !important;
+    color: #fff !important;
+}
 .apply-btn:hover { background: #b71c1c; box-shadow: 0 4px 16px #d32f2f33; }
+/* Bỏ đường xanh - thêm rules mạnh hơn */
+.apply-btn, .apply-btn *, .apply-btn a, .apply-btn a * {
+    text-decoration: none !important;
+    text-decoration-line: none !important;
+    text-decoration-style: none !important;
+    text-decoration-color: transparent !important;
+    outline: none !important;
+    border-bottom: none !important;
+}
+.apply-btn:hover, .apply-btn:hover *, .apply-btn a:hover, .apply-btn a:hover * {
+    text-decoration: none !important;
+    text-decoration-line: none !important;
+    text-decoration-style: none !important;
+    text-decoration-color: transparent !important;
+    outline: none !important;
+    border-bottom: none !important;
+}
 .no-job { text-align: center; color: #888; font-size: 1.1rem; padding: 40px 0; }
 .job-pagination { display: flex; justify-content: center; gap: 8px; margin-top: 32px; }
 .page-btn { display: inline-block; padding: 8px 16px; background: #f5f5f5; color: #333; text-decoration: none; border-radius: 6px; transition: background 0.2s; }
