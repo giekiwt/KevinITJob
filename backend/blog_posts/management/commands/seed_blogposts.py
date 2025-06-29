@@ -3,11 +3,11 @@ from blog_posts.models import BlogPost
 from django.utils import timezone
 
 class Command(BaseCommand):
-    help = 'Seed 10 blog posts'
+    help = 'Seed 20 blog posts'
 
     def handle(self, *args, **kwargs):
         BlogPost.objects.all().delete()
-        for i in range(1, 11):
+        for i in range(1, 21):
             BlogPost.objects.create(
                 title=f"Bài blog IT số {i}",
                 summary=f"Đây là tóm tắt ngắn gọn cho bài blog IT số {i}. Chia sẻ về kinh nghiệm, kỹ năng, hoặc xu hướng mới trong ngành IT.",
@@ -16,4 +16,4 @@ class Command(BaseCommand):
                 tags="IT, Kinh nghiệm, Lập trình, Blog",
                 created_at=timezone.now()
             )
-        self.stdout.write(self.style.SUCCESS('Đã seed 10 blog posts mẫu!')) 
+        self.stdout.write(self.style.SUCCESS('Đã seed 20 blog posts mẫu!')) 
